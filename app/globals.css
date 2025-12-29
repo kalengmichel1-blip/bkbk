@@ -1,0 +1,69 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+:root {
+  /* Brand Colors - Restored from Original */
+  --color-brand-red: #bb1919;
+  /* Original Bright Red */
+  --color-brand-blue: #075fa5;
+  /* Original Deep Blue (Category 3) */
+  --color-brand-yellow: #ea8d03;
+  /* Accent Yellow/Orange */
+
+  --color-brand-charcoal: #1f2125;
+  /* Original Footer Dark */
+
+  /* Backgrounds */
+  --background: #ffffff;
+  --background-secondary: #f8fafc;
+
+  /* Text */
+  --foreground: #4a4a4a;
+  /* Original Body Text */
+  --foreground-muted: #64748b;
+
+  /* UI */
+  --border-color: #e2e8f0;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-brand-red: var(--color-brand-red);
+  --color-brand-blue: var(--color-brand-blue);
+  --color-charcoal-900: var(--color-brand-charcoal);
+
+  --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-serif), Georgia, Cambria, "Times New Roman", Times, serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* Optional: We can fine tune this later. Keeping it light/clean for now as requested for 'institutional' feel */
+  /* If dark mode is needed:
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  } */
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.serif-body {
+  font-family: var(--font-serif);
+}
