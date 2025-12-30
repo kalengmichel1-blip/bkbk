@@ -157,7 +157,7 @@ export default function AboutPage() {
                                 className="relative w-full max-w-md lg:max-w-xl h-[50vh] lg:h-[75vh]"
                             >
                                 <Image
-                                    src="/bkbk-portrait-new.png"
+                                    src="/bkbk-portrait-final.png"
                                     alt="Barnabé Kikaya Bin Karubi"
                                     fill
                                     className="object-cover object-top drop-shadow-2xl rounded-sm"
