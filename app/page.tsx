@@ -1,7 +1,8 @@
-import { getAllPosts, getLatestPosts } from "@/lib/data";
+import { getAllPosts } from "@/lib/data";
 import { HeroSection } from "@/components/hero-section";
 import { NewsGrid } from "@/components/news-grid";
 import { SplashScreen } from "@/components/splash-screen";
+import { FadeIn } from "@/components/fade-in";
 
 export default function Home() {
   const allPosts = getAllPosts();
@@ -19,17 +20,23 @@ export default function Home() {
   const moreNews = allPosts.slice(7, 16); // Next 9 posts
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-transparent">
       <SplashScreen />
       {/* Hero Section */}
       <main className="container mx-auto px-4 py-8 md:py-12">
-        <HeroSection post={heroPost} />
+        <FadeIn>
+          <HeroSection post={heroPost} />
+        </FadeIn>
 
-        <NewsGrid posts={secondaryPosts} title="Latest Headlines" />
+        <FadeIn delay={0.2}>
+          <NewsGrid posts={secondaryPosts} title="Latest Headlines" />
+        </FadeIn>
 
-        <div className="border-t border-gray-200 my-12" />
+        <div className="border-t border-gray-200/50 my-12" />
 
-        <NewsGrid posts={moreNews} title="More News" />
+        <FadeIn delay={0.3}>
+          <NewsGrid posts={moreNews} title="More News" />
+        </FadeIn>
       </main>
     </div>
   );

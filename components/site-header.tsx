@@ -61,6 +61,12 @@ export function SiteHeader() {
                         ))}
                         <div className="h-4 w-px bg-gray-300 mx-2" />
                         <Link
+                            href="/drc-history"
+                            className="text-sm font-medium text-gray-600 hover:text-brand-red transition-colors"
+                        >
+                            History
+                        </Link>
+                        <Link
                             href="/about"
                             className="text-sm font-medium text-gray-600 hover:text-brand-red transition-colors"
                         >

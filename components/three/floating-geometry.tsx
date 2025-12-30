@@ -42,13 +42,22 @@ export default function FloatingGeometry() {
             <Canvas camera={{ position: [0, 0, 5], fov: 50 }}>
                 <ambientLight intensity={0.5} />
                 <pointLight position={[10, 10, 10]} intensity={1.5} />
+                <Rig />
 
                 {/* Randomly placed gems */}
                 <Gem position={[-2, 1, 0]} scale={0.5} color="#bb1919" />
                 <Gem position={[2, -1, -2]} scale={0.7} color="#075fa5" />
                 <Gem position={[0, 2, -3]} scale={0.4} color="#bb1919" />
-                <Gem position={[-1.5, -2, -1]} scale={0.6} color="#gray" />
+                <Gem position={[-1.5, -2, -1]} scale={0.6} color="#888" />
             </Canvas>
         </div>
     );
+}
+
+function Rig() {
+    useFrame((state) => {
+        state.camera.position.lerp({ x: state.pointer.x * 2, y: state.pointer.y * 2, z: 5 }, 0.05)
+        state.camera.lookAt(0, 0, 0)
+    })
+    return null
 }

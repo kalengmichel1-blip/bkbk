@@ -23,6 +23,11 @@ export const metadata: Metadata = {
 };
 
 import { GlobalBackground } from "@/components/three/global-background";
+import { SmoothScroll } from "@/components/smooth-scroll";
+import { GrainOverlay } from "@/components/grain-overlay";
+import { Spotlight } from "@/components/spotlight";
+import { CustomCursor } from "@/components/custom-cursor";
+import { BreakingNewsTicker } from "@/components/breaking-news";
 
 export default function RootLayout({
   children,
@@ -32,10 +37,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${merriweather.variable} antialiased font-sans bg-white text-charcoal-900 flex flex-col min-h-screen relative`}
+        className={`${inter.variable} ${merriweather.variable} antialiased font-sans bg-white text-charcoal-900 flex flex-col min-h-screen relative cursor-none`}
       >
+        <Spotlight />
+        <CustomCursor />
+        <SmoothScroll />
+        <GrainOverlay />
         <GlobalBackground />
         <SiteHeader />
+        <BreakingNewsTicker />
         <div className="flex-grow z-10">
           {children}
         </div>
