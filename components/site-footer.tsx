@@ -1,10 +1,16 @@
+"use client";
+
 import Link from "next/link";
 import { Newspaper } from "lucide-react";
+import dynamic from "next/dynamic";
+
+const ParticleWave = dynamic(() => import("./three/particle-wave"), { ssr: false });
 
 export function SiteFooter() {
     return (
-        <footer className="bg-[#1f2125] text-white py-12 border-t border-gray-800">
-            <div className="container mx-auto px-4">
+        <footer className="relative bg-[#1f2125] text-white py-12 border-t border-gray-800 overflow-hidden">
+            <ParticleWave />
+            <div className="container mx-auto px-4 relative z-10">
                 <div className="grid md:grid-cols-4 gap-8 mb-8">
                     {/* Brand */}
                     <div className="col-span-1 md:col-span-1">

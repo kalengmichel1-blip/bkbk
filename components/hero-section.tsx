@@ -17,32 +17,40 @@ export function HeroSection({ post }: HeroSectionProps) {
         <section className="border-b border-gray-200 pb-12 mb-12 relative overflow-hidden">
             <div className="grid md:grid-cols-12 gap-8 items-start relative z-10">
                 {/* Main Content (Text) */}
-                <div className="md:col-span-8 lg:col-span-8 order-2 md:order-1 relative min-h-[400px] flex flex-col justify-center">
+                <div className="md:col-span-8 lg:col-span-8 order-2 md:order-1 relative min-h-[450px] flex flex-col justify-center">
                     <HeroGlobe />
-                    <div className="relative z-20 bg-white/80 backdrop-blur-sm p-4 rounded-sm -ml-4">
-                        <div className="flex items-center gap-3 mb-4">
-                            <span className="text-brand-red font-bold uppercase tracking-wider text-xs">
+                    <div className="relative z-20 bg-white/90 backdrop-blur-md p-6 md:p-10 rounded-sm shadow-xl border-l-4 border-brand-red -ml-0 md:-ml-8 max-w-2xl transform transition-transform duration-700 hover:translate-x-2">
+                        <div className="flex items-center gap-3 mb-6">
+                            <span className="text-brand-red font-bold uppercase tracking-[0.2em] text-xs">
                                 {categoryName}
                             </span>
-                            <span className="text-gray-400 text-xs">|</span>
-                            <span className="text-gray-500 text-xs uppercase tracking-wider">
+                            <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
+                            <span className="text-gray-500 text-xs uppercase tracking-widest font-medium">
                                 {format(parseISO(post.date), "MMMM d, yyyy")}
                             </span>
                         </div>
 
-                        <Link href={`/article/${post.slug}`} className="group">
-                            <h1 className="text-3xl md:text-5xl font-serif font-bold text-gray-900 leading-tight mb-4 group-hover:text-brand-blue transition-colors">
+                        <Link href={`/article/${post.slug}`} className="group block">
+                            <h1 className="text-3xl md:text-5xl lg:text-6xl font-serif font-bold text-gray-900 leading-[1.1] mb-6 group-hover:text-brand-blue transition-colors">
                                 <span dangerouslySetInnerHTML={{ __html: post.title }} />
                             </h1>
                         </Link>
 
                         <div
-                            className="text-lg text-gray-600 serif-body leading-relaxed mb-6 line-clamp-3"
+                            className="text-lg text-gray-600 serif-body leading-relaxed mb-8 line-clamp-3 md:line-clamp-4 max-w-xl"
                             dangerouslySetInnerHTML={{ __html: post.excerpt }}
                         />
 
-                        <div className="flex items-center gap-2">
-                            <span className="text-xs font-bold text-gray-900 uppercase">By {post.author_name}</span>
+                        <div className="flex items-center justify-between border-t border-gray-100 pt-6">
+                            <div className="flex items-center gap-3">
+                                <div className="h-px w-8 bg-gray-300"></div>
+                                <span className="text-xs font-bold text-gray-900 uppercase tracking-widest">By {post.author_name}</span>
+                            </div>
+
+                            <Link href={`/article/${post.slug}`} className="group/btn flex items-center gap-2 text-brand-blue font-bold uppercase text-xs tracking-widest hover:text-brand-red transition-colors">
+                                Read Story
+                                <span className="block w-4 h-px bg-current transition-all group-hover/btn:w-8"></span>
+                            </Link>
                         </div>
                     </div>
                 </div>

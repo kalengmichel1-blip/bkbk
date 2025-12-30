@@ -22,6 +22,8 @@ export const metadata: Metadata = {
   description: "Political thought, analysis, and news from Dr. Barnabé Kikaya Bin Karubi.",
 };
 
+import { GlobalBackground } from "@/components/three/global-background";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -30,10 +32,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${merriweather.variable} antialiased font-sans bg-white text-charcoal-900 flex flex-col min-h-screen`}
+        className={`${inter.variable} ${merriweather.variable} antialiased font-sans bg-white text-charcoal-900 flex flex-col min-h-screen relative`}
       >
+        <GlobalBackground />
         <SiteHeader />
-        <div className="flex-grow">
+        <div className="flex-grow z-10">
           {children}
         </div>
         <SiteFooter />

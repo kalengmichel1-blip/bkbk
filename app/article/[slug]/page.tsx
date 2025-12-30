@@ -91,7 +91,7 @@ export default async function ArticlePage({ params }: PageProps) {
             {/* Article Body */}
             <main className="container mx-auto px-4 max-w-3xl">
                 <div
-                    className="prose prose-lg prose-slate max-w-none md:prose-xl font-serif leading-loose text-gray-800 
+                    className="prose prose-slate max-w-none md:prose-lg lg:prose-xl font-serif leading-loose text-gray-800 
             prose-headings:font-serif prose-headings:font-bold prose-headings:text-gray-900
             prose-a:text-brand-red prose-a:no-underline hover:prose-a:underline
             prose-img:rounded-sm prose-img:shadow-sm"
