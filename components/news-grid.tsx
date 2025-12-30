@@ -19,7 +19,7 @@ export function NewsGrid({ posts, title }: NewsGridProps) {
                 </h2>
             )}
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-8 md:gap-y-12">
                 {posts.map((post) => {
                     const categoryName = post.categories.length > 0 ? getCategoryName(post.categories[0]) : "News";
 

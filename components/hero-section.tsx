@@ -17,7 +17,7 @@ export function HeroSection({ post }: HeroSectionProps) {
         <section className="border-b border-gray-200 pb-12 mb-12 relative overflow-hidden">
             <div className="grid md:grid-cols-12 gap-8 items-start relative z-10">
                 {/* Main Content (Text) */}
-                <div className="md:col-span-8 lg:col-span-8 order-2 md:order-1 relative min-h-[450px] flex flex-col justify-center">
+                <div className="md:col-span-8 lg:col-span-8 order-2 md:order-1 relative min-h-[400px] md:min-h-[450px] flex flex-col justify-center">
                     <HeroGlobe />
                     <div className="relative z-20 bg-white/90 backdrop-blur-md p-6 md:p-10 rounded-sm shadow-xl border-l-4 border-brand-red -ml-0 md:-ml-8 max-w-2xl transform transition-transform duration-700 hover:translate-x-2">
                         <div className="flex items-center gap-3 mb-6">

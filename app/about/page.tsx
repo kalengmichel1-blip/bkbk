@@ -125,7 +125,7 @@ export default function AboutPage() {
                                 animate={{ x: 0, opacity: 1 }}
                                 transition={{ duration: 1, delay: 0.2 }}
                             >
-                                <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-[7rem] xl:text-[9rem] leading-[0.9] font-sans font-black text-white drop-shadow-xl uppercase tracking-tighter mb-4">
+                                <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-[7rem] xl:text-[9rem] leading-[0.95] md:leading-[0.9] font-sans font-black text-white drop-shadow-xl uppercase tracking-tighter mb-4">
                                     THE<br />
                                     PROFESSOR &  THE<br />
                                     STRATEGIST
@@ -194,7 +194,7 @@ export default function AboutPage() {
             {/* Biography Content (Scrollable) */}
             <section className="bg-white py-12 md:py-32">
                 <div className="container mx-auto px-4 max-w-4xl">
-                    <div className="prose prose-lg prose-red mx-auto text-gray-700 font-serif leading-loose">
+                    <div className="prose prose-base md:prose-lg prose-red mx-auto text-gray-700 font-serif leading-loose">
 
                         <div className="mb-16">
                             <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8 border-b-2 border-brand-red pb-6 inline-block">
