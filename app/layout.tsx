@@ -20,6 +20,13 @@ const merriweather = Merriweather({
 export const metadata: Metadata = {
   title: "Team BKBK | News & Analysis",
   description: "Political thought, analysis, and news from Dr. Barnabé Kikaya Bin Karubi.",
+  keywords: ["DRC", "Congo", "Politics", "Diplomacy", "Barnabé Kikaya Bin Karubi", "Africa", "News", "Analysis"],
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://kikayabinkarubi.net",
+    siteName: "Team BKBK",
+  }
 };
 
 import { GlobalBackground } from "@/components/three/global-background";
