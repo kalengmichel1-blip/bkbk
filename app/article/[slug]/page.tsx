@@ -10,7 +10,7 @@ interface PageProps {
 }
 
 export async function generateStaticParams() {
-    const posts = getAllPosts();
+    const posts = await getAllPosts();
     return posts.map((post) => ({
         slug: post.slug,
     }));
@@ -18,13 +18,13 @@ export async function generateStaticParams() {
 
 export default async function ArticlePage({ params }: PageProps) {
     const { slug } = await params;
-    const post = getPostBySlug(slug);
+    const post = await getPostBySlug(slug);
 
     if (!post) {
         notFound();
     }
 
-    const categoryName = post.categories.length > 0 ? getCategoryName(post.categories[0]) : "News";
+    const categoryName = post.category_names?.[0] || (post.categories.length > 0 ? getCategoryName(post.categories[0]) : "News");
 
     return (
         <article className="bg-white min-h-screen pb-20">

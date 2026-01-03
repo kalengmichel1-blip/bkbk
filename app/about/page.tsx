@@ -172,7 +172,7 @@ export default function AboutPage() {
                                     className="absolute -bottom-4 -left-2 sm:-bottom-6 sm:-left-6 md:bottom-12 md:-left-24 bg-brand-red text-white p-4 sm:p-6 md:p-8 max-w-[260px] sm:max-w-xs md:max-w-md shadow-2xl rounded-sm z-30"
                                 >
                                     <p className="text-base sm:text-lg font-serif leading-relaxed italic">
-                                        "This Congo is not just a country; it is a destiny. Our duty is to ensure that this destiny remains in the hands of its people."
+                                        &quot;This Congo is not just a country; it is a destiny. Our duty is to ensure that this destiny remains in the hands of its people.&quot;
                                     </p>
                                     <div className="mt-4 w-8 h-1 bg-brand-yellow" />
                                 </motion.div>
@@ -185,8 +185,8 @@ export default function AboutPage() {
                 <div className="absolute bottom-0 left-0 bg-white p-8 md:p-10 z-30 max-w-sm hidden lg:block shadow-lg">
                     <h3 className="text-brand-red font-bold uppercase tracking-widest mb-2 text-xs">Diplomacy & Strategy</h3>
                     <p className="text-gray-600 text-sm mb-4 leading-relaxed font-serif">
-                        Former Diplomatic Advisor to the Head of State.<br />
-                        Professor of International Relations.
+                        Former Ambassador & Diplomatic Advisor to the Head of State.<br />
+                        Professor of Information and Communication Sciences at Unikin.
                     </p>
                 </div>
             </section>
@@ -203,7 +203,7 @@ export default function AboutPage() {
 
                             <p className="text-xl leading-relaxed text-gray-900 mb-8 font-medium">
                                 <strong>Barnabé Kikaya Bin Karubi</strong> is a distinguished Congolese scholar, diplomat, and statesman. His career is a testament to the intersection of intellectual rigor and high-stakes statecraft.
-                                As a long-serving servant of the Democratic Republic of the Congo, he has stood at the forefront of the nation's diplomatic battles and reconstruction efforts.
+                                As a long-serving servant of the Democratic Republic of the Congo, he has stood at the forefront of the nation&apos;s diplomatic battles and reconstruction efforts.
                             </p>
                         </div>
 
@@ -221,7 +221,7 @@ export default function AboutPage() {
                         <div className="mb-16">
                             <h4 className="text-2xl font-bold text-brand-blue mb-8">Diplomatic & Political Leadership</h4>
                             <p className="mb-8">
-                                Dr. Kikaya's political ascent coincides with pivotal moments in Congolese history.
+                                Dr. Kikaya&apos;s political ascent coincides with pivotal moments in Congolese history.
                                 Under President Laurent-Désiré Kabila, he was appointed <strong>Ambassador to Zimbabwe</strong>, a critical ally during the war.
                                 Later, under President Joseph Kabila, he took on the vital role of <strong>Minister of Information (2001-2003)</strong>, serving as the voice of the government during the Sun City peace negotiations.
                             </p>
@@ -253,7 +253,7 @@ export default function AboutPage() {
                         <div>
                             <h4 className="text-2xl font-bold text-brand-blue mb-6">Academic Legacy</h4>
                             <p className="mb-0">
-                                Beyond the corridors of power, "The Professor" has never left the classroom.
+                                Beyond the corridors of power, &quot;The Professor&quot; has never left the classroom.
                                 Since 2005, he has served as a <strong>Professor of Information and Communication Sciences</strong> at the <strong>University of Kinshasa (UNIKIN)</strong>.
                                 He is also a Distinguished Research Associate at the <strong>University of Johannesburg (CADL)</strong>, contributing to pan-African discourse on diplomacy and leadership.
                             </p>

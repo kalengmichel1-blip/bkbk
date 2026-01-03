@@ -4,8 +4,8 @@ import { NewsGrid } from "@/components/news-grid";
 import { SplashScreen } from "@/components/splash-screen";
 import { FadeIn } from "@/components/fade-in";
 
-export default function Home() {
-  const allPosts = getAllPosts();
+export default async function Home() {
+  const allPosts = await getAllPosts();
 
   if (allPosts.length === 0) {
     return (

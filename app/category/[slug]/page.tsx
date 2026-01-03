@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { getAllPosts, getPostsByCategory, getCategoryName, getCategorySlug } from "@/lib/data";
+import { getPostsByCategory } from "@/lib/data";
 import { NewsGrid } from "@/components/news-grid";
-import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 
 interface PageProps {
@@ -10,8 +9,9 @@ interface PageProps {
 
 export async function generateStaticParams() {
     // Pre-render common categories
-    const categories = ["news", "analysis", "opinion", "la-plume-de-bkbk", "call-of-duties", "la-voix-des-autres"];
-    return categories.map((slug) => ({
+    // This would ideally come from a CMS or config
+    const predefinedCategories = ["news", "analysis", "opinion", "la-plume-de-bkbk", "call-of-duties", "la-voix-des-autres"];
+    return predefinedCategories.map((slug) => ({
         slug: slug,
     }));
 }
@@ -20,7 +20,7 @@ export default async function CategoryPage({ params }: PageProps) {
     const { slug } = await params;
 
     // Note: Local data lookup might be loose with slug matching, so we ensure exact match or fallback
-    const posts = getPostsByCategory(slug);
+    const posts = await getPostsByCategory(slug);
     // Get pretty name: currently our helper takes ID, but we can infer or use a slug mapper.
     // For now, let's just capitalize or use a map if getCategoryName fails us without an ID.
     const categoryName = slug.replace(/-/g, " ").replace(/\b\w/g, l => l.toUpperCase());

@@ -22,7 +22,7 @@ export function NewsGrid({ posts, title }: NewsGridProps) {
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-8 md:gap-y-12">
                 {posts.map((post) => {
-                    const categoryName = post.categories.length > 0 ? getCategoryName(post.categories[0]) : "News";
+                    const categoryName = post.category_names?.[0] || (post.categories.length > 0 ? getCategoryName(post.categories[0]) : "News");
 
                     return (
                         <TiltCard key={post.id} className="h-full">

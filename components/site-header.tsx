@@ -1,8 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { Search, Menu, X, Newspaper } from "lucide-react";
+import { Search, Menu, X } from "lucide-react";
 import clsx from "clsx";
 
 export function SiteHeader() {
@@ -39,10 +40,13 @@ export function SiteHeader() {
                 <div className="flex items-center justify-between">
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-2 group">
-                        <img
+                        <Image
                             src="/logo.png"
                             alt="Team BKBK Logo"
+                            width={150}
+                            height={48}
                             className="h-10 md:h-12 w-auto object-contain"
+                            priority
                         />
                         {/* Mobile-only text fallback if needed, but logo has text */}
                         <span className="sr-only">Team BKBK</span>

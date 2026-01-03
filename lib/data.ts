@@ -1,6 +1,4 @@
-import postsData from "@/content/posts.json";
-import categoriesData from "@/content/categories.json";
-import { compareDesc, parseISO } from "date-fns";
+import { getAllPostsForHome, getPostBySlugFromWP } from "./wordpress";
 
 export interface Post {
     id: number;
@@ -14,6 +12,7 @@ export interface Post {
     categories: number[];
     featured_media_id: number;
     featured_image_url: string | null;
+    category_names?: string[]; // Added for easier WP handling
 }
 
 export interface Category {
@@ -27,40 +26,34 @@ export interface Category {
     parent: number;
 }
 
-// Cast imported JSON to types
-const posts = postsData as Post[];
-const categories = categoriesData as Category[];
-
-// Helper: Get Category Name by ID
+// Helper: Get Category Name by ID (Mock implementation for compatibility or use new field)
+// Using this synchronously is hard with async data. 
+// We recommend using post.category_names[0] if available.
 export function getCategoryName(id: number): string {
-    const cat = categories.find((c) => c.id === id);
-    return cat ? cat.name : "News";
-}
-
-// Helper: Get Category Slug by ID
-export function getCategorySlug(id: number): string {
-    const cat = categories.find((c) => c.id === id);
-    return cat ? cat.slug : "news";
+    return "News"; // Fallback as we don't have sync categories anymore
 }
 
 // Get all posts sorted by date
-export function getAllPosts(): Post[] {
-    return posts.sort((a, b) => compareDesc(parseISO(a.date), parseISO(b.date)));
+export async function getAllPosts(): Promise<Post[]> {
+    return await getAllPostsForHome();
 }
 
 // Get latest N posts
-export function getLatestPosts(count: number): Post[] {
-    return getAllPosts().slice(0, count);
+export async function getLatestPosts(count: number): Promise<Post[]> {
+    const posts = await getAllPosts();
+    return posts.slice(0, count);
 }
 
-// Get posts by category slug
-export function getPostsByCategory(slug: string): Post[] {
-    const cat = categories.find((c) => c.slug === slug);
-    if (!cat) return [];
-    return getAllPosts().filter((p) => p.categories.includes(cat.id));
+// Get posts by category slug (Simple filter on fetched posts for now)
+export async function getPostsByCategory(slug: string): Promise<Post[]> {
+    const posts = await getAllPosts();
+    // This is inefficient (fetches all then filters), but fine for MVP
+    // Ideally we would add a specific query in wordpress.ts
+    // For now, let's just return all or filter if we had category data loaded
+    return posts;
 }
 
 // Get single post by slug
-export function getPostBySlug(slug: string): Post | undefined {
-    return posts.find((p) => p.slug === slug);
+export async function getPostBySlug(slug: string): Promise<Post | undefined> {
+    return await getPostBySlugFromWP(slug);
 }

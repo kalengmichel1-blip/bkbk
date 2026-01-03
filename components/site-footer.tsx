@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { Newspaper } from "lucide-react";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 
 const ParticleWave = dynamic(() => import("./three/particle-wave"), { ssr: false });
 
@@ -15,9 +15,11 @@ export function SiteFooter() {
                     {/* Brand */}
                     <div className="col-span-1 md:col-span-1">
                         <Link href="/" className="block mb-4">
-                            <img
+                            <Image
                                 src="/logo.png"
                                 alt="Team BKBK Logo"
+                                width={120}
+                                height={40}
                                 className="h-10 w-auto object-contain brightness-0 invert opacity-90"
                             />
                         </Link>

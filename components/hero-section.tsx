@@ -12,7 +12,7 @@ interface HeroSectionProps {
 }
 
 export function HeroSection({ post }: HeroSectionProps) {
-    const categoryName = post.categories.length > 0 ? getCategoryName(post.categories[0]) : "News";
+    const categoryName = post.category_names?.[0] || (post.categories.length > 0 ? getCategoryName(post.categories[0]) : "News");
 
     return (
         <section className="border-b border-gray-200 pb-12 mb-12 relative overflow-hidden">

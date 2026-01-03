@@ -43,7 +43,14 @@ const events = [
     },
 ];
 
-function TimelineItem({ event, index }: { event: any; index: number }) {
+interface TimelineEvent {
+    year: string;
+    title: string;
+    description: string;
+    color: string;
+}
+
+function TimelineItem({ event, index }: { event: TimelineEvent; index: number }) {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true, margin: "-100px" });
 

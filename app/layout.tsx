@@ -26,7 +26,6 @@ import { GlobalBackground } from "@/components/three/global-background";
 import { SmoothScroll } from "@/components/smooth-scroll";
 import { GrainOverlay } from "@/components/grain-overlay";
 import { Spotlight } from "@/components/spotlight";
-import { CustomCursor } from "@/components/custom-cursor";
 import { BreakingNewsTicker } from "@/components/breaking-news";
 
 export default function RootLayout({
@@ -37,10 +36,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${merriweather.variable} antialiased font-sans bg-white text-charcoal-900 flex flex-col min-h-screen relative cursor-none`}
+        className={`${inter.variable} ${merriweather.variable} antialiased font-sans bg-white text-charcoal-900 flex flex-col min-h-screen relative`}
       >
         <Spotlight />
-        <CustomCursor />
         <SmoothScroll />
         <GrainOverlay />
         <GlobalBackground />
