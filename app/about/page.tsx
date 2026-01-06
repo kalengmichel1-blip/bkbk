@@ -32,7 +32,7 @@ export default function AboutPage() {
             try {
                 await audio.play();
                 setIsPlaying(true);
-            } catch (error) {
+            } catch {
                 console.log("Autoplay blocked. Waiting for interaction.");
                 // Add fallback listeners
                 document.addEventListener("click", enableAudio);

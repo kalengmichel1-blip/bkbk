@@ -7,10 +7,7 @@ export function Spotlight() {
     const mouseX = useMotionValue(0);
     const mouseY = useMotionValue(0);
 
-    function handleMouseMove({ currentTarget, clientX, clientY }: any) {
-        mouseX.set(clientX);
-        mouseY.set(clientY);
-    }
+
 
     useEffect(() => {
         window.addEventListener("mousemove", (e) => {

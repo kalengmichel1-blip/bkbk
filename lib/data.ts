@@ -29,7 +29,9 @@ export interface Category {
 // Helper: Get Category Name by ID (Mock implementation for compatibility or use new field)
 // Using this synchronously is hard with async data. 
 // We recommend using post.category_names[0] if available.
-export function getCategoryName(id: number): string {
+
+export function getCategoryName(_id: number): string {
+    void _id;
     return "News"; // Fallback as we don't have sync categories anymore
 }
 
@@ -45,7 +47,9 @@ export async function getLatestPosts(count: number): Promise<Post[]> {
 }
 
 // Get posts by category slug (Simple filter on fetched posts for now)
-export async function getPostsByCategory(slug: string): Promise<Post[]> {
+
+export async function getPostsByCategory(_slug: string): Promise<Post[]> {
+    void _slug;
     const posts = await getAllPosts();
     // This is inefficient (fetches all then filters), but fine for MVP
     // Ideally we would add a specific query in wordpress.ts

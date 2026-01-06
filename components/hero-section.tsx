@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Post, getCategoryName } from "@/lib/data";
 import { format, parseISO } from "date-fns";
 import { HeroGlobe } from "./hero-globe";
+import { TiltCard } from "@/components/tilt-card";
 import { KineticText } from "@/components/kinetic-text";
 
 interface HeroSectionProps {
@@ -20,7 +21,7 @@ export function HeroSection({ post }: HeroSectionProps) {
                 {/* Main Content (Text) */}
                 <div className="md:col-span-8 lg:col-span-8 order-2 md:order-1 relative min-h-[400px] md:min-h-[450px] flex flex-col justify-center">
                     <HeroGlobe />
-                    <div className="relative z-20 bg-white/70 backdrop-blur-xl p-6 md:p-10 rounded-sm shadow-2xl border border-white/40 border-l-4 border-l-brand-red -ml-0 md:-ml-8 max-w-2xl transform transition-transform duration-700 hover:translate-x-2">
+                    <TiltCard className="relative z-20 bg-white/70 backdrop-blur-xl p-6 md:p-10 rounded-sm shadow-2xl border border-white/40 border-l-4 border-l-brand-red -ml-0 md:-ml-8 max-w-2xl">
                         <div className="flex items-center gap-3 mb-6">
                             <span className="text-brand-red font-bold uppercase tracking-[0.2em] text-xs">
                                 {categoryName}
@@ -42,18 +43,19 @@ export function HeroSection({ post }: HeroSectionProps) {
                             dangerouslySetInnerHTML={{ __html: post.excerpt }}
                         />
 
+
                         <div className="flex items-center justify-between border-t border-gray-100 pt-6">
                             <div className="flex items-center gap-3">
                                 <div className="h-px w-8 bg-gray-300"></div>
                                 <span className="text-xs font-bold text-gray-900 uppercase tracking-widest">By {post.author_name}</span>
                             </div>
 
-                            <Link href={`/article/${post.slug}`} className="group/btn flex items-center gap-2 text-brand-blue font-bold uppercase text-xs tracking-widest hover:text-brand-red transition-colors">
+                            <Link href={`/article/${post.slug}`} className="group/btn flex items-center gap-2 text-brand-blue font-bold uppercase text-xs tracking-widest hover:text-brand-red transition-all hover:scale-105 transform">
                                 Read Story
                                 <span className="block w-4 h-px bg-current transition-all group-hover/btn:w-8"></span>
                             </Link>
                         </div>
-                    </div>
+                    </TiltCard>
                 </div>
 
                 {/* Featured Image */}
@@ -76,6 +78,6 @@ export function HeroSection({ post }: HeroSectionProps) {
                     )}
                 </div>
             </div>
-        </section>
+        </section >
     );
 }

@@ -4,8 +4,16 @@ import { useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Icosahedron, Float } from "@react-three/drei";
 
-function Gem({ position, scale, color }: any) {
-    const ref = useRef<any>(null);
+import * as THREE from "three";
+
+interface GemProps {
+    position: [number, number, number];
+    scale: number;
+    color: string;
+}
+
+function Gem({ position, scale, color }: GemProps) {
+    const ref = useRef<THREE.Mesh>(null);
     const [hovered, setHover] = useState(false);
 
     useFrame((state, delta) => {
@@ -56,8 +64,10 @@ export default function FloatingGeometry() {
 
 function Rig() {
     useFrame((state) => {
-        state.camera.position.lerp({ x: state.pointer.x * 2, y: state.pointer.y * 2, z: 5 }, 0.05)
-        state.camera.lookAt(0, 0, 0)
+        if (state.camera.position && state.pointer) {
+            state.camera.position.lerp({ x: state.pointer.x * 2, y: state.pointer.y * 2, z: 5 } as THREE.Vector3, 0.05)
+            state.camera.lookAt(0, 0, 0)
+        }
     })
     return null
 }

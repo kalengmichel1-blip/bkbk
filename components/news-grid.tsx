@@ -26,7 +26,7 @@ export function NewsGrid({ posts, title }: NewsGridProps) {
 
                     return (
                         <TiltCard key={post.id} className="h-full">
-                            <article className="group flex flex-col h-full bg-white/80 backdrop-blur-lg transition-all duration-500 hover:shadow-2xl hover:bg-white rounded-sm p-4 border border-white/20 hover:border-gray-100 transform-style-3d">
+                            <article className="group flex flex-col h-full bg-white/80 backdrop-blur-lg transition-all duration-500 hover:shadow-2xl hover:bg-white rounded-sm p-4 border border-white/20 hover:border-gray-100 transform-style-3d hover:-translate-y-2">
                                 {/* Image */}
                                 <div className="relative aspect-[3/2] w-full overflow-hidden bg-gray-100 rounded-sm mb-6 shadow-sm">
                                     {post.featured_image_url ? (

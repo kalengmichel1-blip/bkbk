@@ -3,13 +3,15 @@
 import { useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Points, PointMaterial } from "@react-three/drei";
-// @ts-ignore
+import * as THREE from "three";
+// @ts-expect-error maath lacks types
 import * as random from "maath/random/dist/maath-random.esm";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function Wave(props: any) {
-    const ref = useRef<any>(null);
+    const ref = useRef<THREE.Points>(null);
 
-    // @ts-ignore
+
     const sphere = random.inSphere(new Float32Array(1200), { radius: 1.5 });
 
     useFrame((state, delta) => {

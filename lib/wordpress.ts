@@ -1,8 +1,37 @@
-import { Post, Category } from "./data";
+import { Post } from "./data";
 
 const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || "https://demo.wpgraphql.com/graphql";
 
-async function fetchAPI(query: string, { variables }: { variables?: any } = {}) {
+// Basic interfaces for WP GraphQL response
+interface WPNode {
+  databaseId: number;
+  date: string;
+  slug: string;
+  title: string;
+  content: string;
+  excerpt: string;
+  author?: {
+    node?: {
+      databaseId: number;
+      name: string;
+    }
+  };
+  categories?: {
+    nodes?: Array<{
+      databaseId: number;
+      name: string;
+      slug: string;
+    }>
+  };
+  featuredImage?: {
+    node?: {
+      databaseId: number;
+      sourceUrl: string;
+    }
+  };
+}
+
+async function fetchAPI(query: string, { variables }: { variables?: Record<string, unknown> } = {}) {
   try {
     const headers = { 'Content-Type': 'application/json' };
     // Validating URL presence
@@ -32,7 +61,7 @@ async function fetchAPI(query: string, { variables }: { variables?: any } = {}) 
         throw new Error('Failed to fetch from WordPress API');
       }
       return json.data;
-    } catch (parseError) {
+    } catch {
       console.error("Invalid JSON response from WordPress API.");
       console.error("API URL:", API_URL);
       console.error("Response Start:", text.substring(0, 200));
@@ -121,7 +150,7 @@ export async function getPostBySlugFromWP(slug: string): Promise<Post | undefine
   return mapPostFromWP(data.post);
 }
 
-function mapPostFromWP(node: any): Post {
+function mapPostFromWP(node: WPNode): Post {
   return {
     id: node.databaseId,
     date: node.date,
@@ -131,10 +160,10 @@ function mapPostFromWP(node: any): Post {
     excerpt: node.excerpt,
     author_id: node.author?.node?.databaseId || 0,
     author_name: node.author?.node?.name || "Team BKBK",
-    categories: node.categories?.nodes?.map((cat: any) => cat.databaseId) || [],
+    categories: node.categories?.nodes?.map((cat) => cat.databaseId) || [],
     featured_media_id: node.featuredImage?.node?.databaseId || 0,
     featured_image_url: node.featuredImage?.node?.sourceUrl || null,
     // Helper property not in original interface but useful
-    category_names: node.categories?.nodes?.map((cat: any) => cat.name) || [],
+    category_names: node.categories?.nodes?.map((cat) => cat.name) || [],
   };
 }

@@ -22,6 +22,7 @@ export function KineticText({ children, className }: { children: string; classNa
                 type: "spring",
                 damping: 12,
                 stiffness: 100,
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } as any,
         },
         hidden: {
@@ -31,6 +32,7 @@ export function KineticText({ children, className }: { children: string; classNa
                 type: "spring",
                 damping: 12,
                 stiffness: 100,
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } as any,
         },
     };
