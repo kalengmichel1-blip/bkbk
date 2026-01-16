@@ -1,4 +1,4 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from "next"; // Trigger restart
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -7,7 +7,19 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "admin.kikayabinkarubi.net",
+        hostname: "cms.kikayabinkarubi.net",
+      },
+      {
+        protocol: "https",
+        hostname: "kikayabinkarubi.net",
+      },
+      {
+        protocol: "https",
+        hostname: "secure.gravatar.com",
+      },
+      {
+        protocol: "https",
+        hostname: "placehold.co",
       },
     ],
   },

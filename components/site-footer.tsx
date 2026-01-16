@@ -1,15 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import dynamic from "next/dynamic";
 import Image from "next/image";
 
-const ParticleWave = dynamic(() => import("./three/particle-wave"), { ssr: false });
 
 export function SiteFooter() {
     return (
         <footer className="relative bg-[#1f2125] text-white py-12 border-t border-gray-800 overflow-hidden">
-            <ParticleWave />
             <div className="container mx-auto px-4 relative z-10">
                 <div className="grid md:grid-cols-4 gap-8 mb-8">
                     {/* Brand */}

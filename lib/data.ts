@@ -1,4 +1,4 @@
-import { getAllPostsForHome, getPostBySlugFromWP } from "./wordpress";
+import { createClient } from "@supabase/supabase-js";
 
 export interface Post {
     id: number;
@@ -7,12 +7,12 @@ export interface Post {
     title: string;
     content: string;
     excerpt: string;
-    author_id: number;
+    author_id: string;
     author_name: string;
     categories: number[];
     featured_media_id: number;
     featured_image_url: string | null;
-    category_names?: string[]; // Added for easier WP handling
+    category_names?: string[];
 }
 
 export interface Category {
@@ -26,38 +26,94 @@ export interface Category {
     parent: number;
 }
 
-// Helper: Get Category Name by ID (Mock implementation for compatibility or use new field)
-// Using this synchronously is hard with async data. 
-// We recommend using post.category_names[0] if available.
-
 export function getCategoryName(_id: number): string {
-    void _id;
-    return "News"; // Fallback as we don't have sync categories anymore
+    return "News";
 }
 
-// Get all posts sorted by date
+// Create a safe client for static generation/public fetching
+const getSupabase = () => {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+    // Return a dummy client if config is missing or invalid to allow build to pass
+    if (!url || !key || url === 'your-project-url' || !url.startsWith('http')) {
+        console.warn('Supabase not configured. Returning mock client.');
+        return {
+            from: () => ({
+                select: () => ({
+                    eq: () => ({
+                        single: async () => ({ data: null, error: null }),
+                        order: () => ({ limit: async () => ({ data: [] }) }),
+                    }),
+                    order: () => ({ limit: async () => ({ data: [] }) }),
+                }),
+            })
+        } as any;
+    }
+
+    return createClient(url, key);
+}
+
+function mapSupabasePost(post: any): Post {
+    return {
+        id: post.id,
+        date: post.published_at || post.created_at,
+        slug: post.slug,
+        title: post.title,
+        content: post.content || '',
+        excerpt: post.excerpt || '',
+        author_id: post.author_id,
+        author_name: post.author?.full_name || 'Team BKBK',
+        categories: [],
+        featured_media_id: 0,
+        featured_image_url: post.featured_image,
+        category_names: ['News'],
+    };
+}
+
 export async function getAllPosts(): Promise<Post[]> {
-    return await getAllPostsForHome();
+    const supabase = getSupabase();
+    const { data } = await supabase
+        .from('posts')
+        .select('*, author:profiles(full_name)')
+        .eq('status', 'published')
+        .order('published_at', { ascending: false });
+
+    if (!data) return [];
+
+    // @ts-ignore
+    return data.map(mapSupabasePost);
 }
 
-// Get latest N posts
 export async function getLatestPosts(count: number): Promise<Post[]> {
-    const posts = await getAllPosts();
-    return posts.slice(0, count);
-}
+    const supabase = getSupabase();
+    const { data } = await supabase
+        .from('posts')
+        .select('*, author:profiles(full_name)')
+        .eq('status', 'published')
+        .order('published_at', { ascending: false })
+        .limit(count);
 
-// Get posts by category slug (Simple filter on fetched posts for now)
+    if (!data) return [];
+
+    // @ts-ignore
+    return data.map(mapSupabasePost);
+}
 
 export async function getPostsByCategory(_slug: string): Promise<Post[]> {
-    void _slug;
-    const posts = await getAllPosts();
-    // This is inefficient (fetches all then filters), but fine for MVP
-    // Ideally we would add a specific query in wordpress.ts
-    // For now, let's just return all or filter if we had category data loaded
-    return posts;
+    return getAllPosts();
 }
 
-// Get single post by slug
 export async function getPostBySlug(slug: string): Promise<Post | undefined> {
-    return await getPostBySlugFromWP(slug);
+    const supabase = getSupabase();
+    const { data } = await supabase
+        .from('posts')
+        .select('*, author:profiles(full_name)')
+        .eq('slug', slug)
+        .single();
+
+    if (!data) return undefined;
+
+    // @ts-ignore
+    return mapSupabasePost(data);
 }

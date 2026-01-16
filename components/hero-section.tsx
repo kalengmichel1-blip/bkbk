@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Post, getCategoryName } from "@/lib/data";
 import { format, parseISO } from "date-fns";
-import { HeroGlobe } from "./hero-globe";
+
 import { TiltCard } from "@/components/tilt-card";
 import { KineticText } from "@/components/kinetic-text";
 
@@ -20,7 +20,6 @@ export function HeroSection({ post }: HeroSectionProps) {
             <div className="grid md:grid-cols-12 gap-8 items-start relative z-10">
                 {/* Main Content (Text) */}
                 <div className="md:col-span-8 lg:col-span-8 order-2 md:order-1 relative min-h-[400px] md:min-h-[450px] flex flex-col justify-center">
-                    <HeroGlobe />
                     <TiltCard className="relative z-20 bg-white/70 backdrop-blur-xl p-6 md:p-10 rounded-sm shadow-2xl border border-white/40 border-l-4 border-l-brand-red -ml-0 md:-ml-8 max-w-2xl">
                         <div className="flex items-center gap-3 mb-6">
                             <span className="text-brand-red font-bold uppercase tracking-[0.2em] text-xs">

@@ -1,0 +1,24 @@
+
+> bkbk@0.1.0 build
+> next build
+
+Γû▓ Next.js 16.1.1 (Turbopack)
+- Environments: .env.local
+
+ΓÜá The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+  Creating an optimized production build ...
+Γ£ô Compiled successfully in 10.9s
+  Running TypeScript ...
+Failed to compile.
+
+./lib/api.ts:31:22
+Type error: Parameter 'post' implicitly has an 'any' type.
+
+  29 |     if (!data) return []
+  30 |
+> 31 |     return data.map((post) => ({
+     |                      ^
+  32 |         id: post.id,
+  33 |         title: post.title,
+  34 |         slug: post.slug,
+Next.js build worker exited with code: 1 and signal: null

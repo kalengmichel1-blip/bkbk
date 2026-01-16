@@ -1,169 +1,125 @@
-import { Post } from "./data";
+const API_URL = process.env.WORDPRESS_API_URL || "https://cms.kikayabinkarubi.net/graphql";
 
-const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || "https://demo.wpgraphql.com/graphql";
+async function fetchAPI(query: string, { variables }: { variables?: any } = {}) {
+  const headers = { 'Content-Type': 'application/json' };
+  const res = await fetch(API_URL, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({ query, variables }),
+  });
 
-// Basic interfaces for WP GraphQL response
-interface WPNode {
-  databaseId: number;
-  date: string;
-  slug: string;
-  title: string;
-  content: string;
-  excerpt: string;
-  author?: {
-    node?: {
-      databaseId: number;
-      name: string;
-    }
-  };
-  categories?: {
-    nodes?: Array<{
-      databaseId: number;
-      name: string;
-      slug: string;
-    }>
-  };
-  featuredImage?: {
-    node?: {
-      databaseId: number;
-      sourceUrl: string;
-    }
-  };
-}
-
-async function fetchAPI(query: string, { variables }: { variables?: Record<string, unknown> } = {}) {
-  try {
-    const headers = { 'Content-Type': 'application/json' };
-    // Validating URL presence
-    if (!API_URL) {
-      throw new Error("NEXT_PUBLIC_WORDPRESS_API_URL is not defined");
-    }
-
-    const res = await fetch(API_URL, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({ query, variables }),
-      next: { revalidate: 60 },
-    });
-
-    if (!res.ok) {
-      console.error(`API Fetch Failed: ${res.status} ${res.statusText}`);
-      console.error(`URL attempted: ${API_URL}`);
-      throw new Error(`WordPress API returned status ${res.status}`);
-    }
-
-    const text = await res.text();
-
-    try {
-      const json = JSON.parse(text);
-      if (json.errors) {
-        console.error(json.errors);
-        throw new Error('Failed to fetch from WordPress API');
-      }
-      return json.data;
-    } catch {
-      console.error("Invalid JSON response from WordPress API.");
-      console.error("API URL:", API_URL);
-      console.error("Response Start:", text.substring(0, 200));
-      throw new Error("Received HTML instead of JSON. Check your URL.");
-    }
-  } catch (e) {
-    console.error("WordPress API Error:", e);
-    return null;
+  const json = await res.json();
+  if (json.errors) {
+    console.error(json.errors);
+    throw new Error('Failed to fetch API');
   }
+  return json.data;
 }
 
-export async function getAllPostsForHome(): Promise<Post[]> {
-  const data = await fetchAPI(`
+export async function getAllPostsForHome(preview: boolean) {
+  const data = await fetchAPI(
+    `
     query AllPosts {
       posts(first: 20, where: { orderby: { field: DATE, order: DESC } }) {
-        nodes {
-          databaseId
-          date
-          slug
-          title
-          excerpt
-          content
-          author {
-            node {
-              databaseId
-              name
+        edges {
+          node {
+            title
+            excerpt
+            slug
+            date
+            featuredImage {
+              node {
+                sourceUrl
+              }
             }
-          }
-          categories {
-            nodes {
-              databaseId
-              name
-              slug
-            }
-          }
-          featuredImage {
-            node {
-              databaseId
-              sourceUrl
+            author {
+              node {
+                name
+                firstName
+                lastName
+                avatar {
+                  url
+                }
+              }
             }
           }
         }
       }
     }
-  `);
+  `
+  );
 
-  return data?.posts?.nodes?.map(mapPostFromWP) || [];
+  return data?.posts;
 }
 
-export async function getPostBySlugFromWP(slug: string): Promise<Post | undefined> {
-  const data = await fetchAPI(`
-    query PostBySlug($slug: ID!) {
-      post(id: $slug, idType: SLUG) {
-        databaseId
-        date
-        slug
-        title
-        excerpt
-        content
-        author {
-          node {
-            databaseId
-            name
-          }
+export async function getPostAndMorePosts(slug: string, preview: boolean, previewData: any) {
+  const postPreview = preview && previewData?.post;
+  // The slug may be the id of an unpublished post
+  const isId = Number.isInteger(Number(slug));
+  const isSamePost = isId
+    ? Number(slug) === postPreview?.id
+    : slug === postPreview?.slug;
+  const isDraft = isSamePost && preview;
+  const revisions = isDraft && postPreview?.revisions;
+  const primary = isDraft && revisions ? revisions.nodes[0] : postPreview;
+
+  const data = await fetchAPI(
+    `
+    fragment PostFields on Post {
+      title
+      excerpt
+      slug
+      date
+      featuredImage {
+        node {
+          sourceUrl
         }
-        categories {
-          nodes {
-            databaseId
+      }
+      categories {
+        edges {
+          node {
             name
             slug
           }
         }
-        featuredImage {
-          node {
-            databaseId
-            sourceUrl
+      }
+      author {
+        node {
+          name
+          firstName
+          lastName
+          avatar {
+            url
           }
         }
       }
     }
-  `, {
-    variables: { slug }
-  });
+    query PostBySlug($id: ID!, $idType: PostIdType!) {
+      post(id: $id, idType: $idType) {
+        ...PostFields
+        content
+      }
+      posts(first: 3, where: { orderby: { field: DATE, order: DESC } }) {
+        edges {
+          node {
+            ...PostFields
+          }
+        }
+      }
+    }
+  `,
+    {
+      variables: {
+        id: isDraft ? postPreview.id : slug,
+        idType: isDraft ? 'DATABASE_ID' : 'SLUG',
+      },
+    }
+  );
 
-  if (!data?.post) return undefined;
-  return mapPostFromWP(data.post);
-}
+  // Filter out the main post
+  data.posts.edges = data.posts.edges.filter(({ node }: any) => node.slug !== slug);
+  // If there are still 3 posts, remove the last one
+  if (data.posts.edges.length > 2) data.posts.edges.pop();
 
-function mapPostFromWP(node: WPNode): Post {
-  return {
-    id: node.databaseId,
-    date: node.date,
-    slug: node.slug,
-    title: node.title,
-    content: node.content,
-    excerpt: node.excerpt,
-    author_id: node.author?.node?.databaseId || 0,
-    author_name: node.author?.node?.name || "Team BKBK",
-    categories: node.categories?.nodes?.map((cat) => cat.databaseId) || [],
-    featured_media_id: node.featuredImage?.node?.databaseId || 0,
-    featured_image_url: node.featuredImage?.node?.sourceUrl || null,
-    // Helper property not in original interface but useful
-    category_names: node.categories?.nodes?.map((cat) => cat.name) || [],
-  };
+  return data;
 }

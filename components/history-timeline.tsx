@@ -38,7 +38,7 @@ const events = [
     {
         year: "2025",
         title: "The Future & Strategic Vision",
-        description: "The DRC continues its path towards modernization, focusing on economic sovereignty, digital transformation, and regional leadership. The 'Professor & Strategist' vision guides the intellectual framework for this new era.",
+        description: "The DRC continues its path towards modernization, focusing on economic sovereignty, digital transformation, and regional leadership.",
         color: "bg-purple-600",
     },
 ];

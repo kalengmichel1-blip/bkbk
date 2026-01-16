@@ -29,10 +29,11 @@ export const metadata: Metadata = {
   }
 };
 
-import { GlobalBackground } from "@/components/three/global-background";
 import { SmoothScroll } from "@/components/smooth-scroll";
 import { GrainOverlay } from "@/components/grain-overlay";
 import { Spotlight } from "@/components/spotlight";
+import { VisitTracker } from "@/components/analytics/visit-tracker";
+import { CulturalBackground } from "@/components/cultural-background";
 import { BreakingNewsTicker } from "@/components/breaking-news";
 
 export default function RootLayout({
@@ -43,12 +44,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
+        suppressHydrationWarning
         className={`${inter.variable} ${merriweather.variable} antialiased font-sans bg-white text-charcoal-900 flex flex-col min-h-screen relative`}
       >
         <Spotlight />
         <SmoothScroll />
         <GrainOverlay />
-        <GlobalBackground />
+        <CulturalBackground />
+        <VisitTracker />
+
         <SiteHeader />
         <BreakingNewsTicker />
         <div className="flex-grow z-10">
