@@ -7,8 +7,12 @@ export async function createClient() {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
     const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
+    console.log('Creating Supabase Client...');
+    console.log('URL defined:', !!supabaseUrl);
+    console.log('Key defined:', !!supabaseKey);
+
     if (!supabaseUrl || !supabaseKey || supabaseUrl === 'your-project-url') {
-        console.warn('Supabase credentials missing. Returning stub client.')
+        console.error('Supabase credentials missing in Production!')
         // Return a dummy client that satisfies the interface but does nothing/throws clear error on use
         return {
             auth: {
