@@ -4,6 +4,8 @@ import { NewsGrid } from "@/components/news-grid";
 import { SplashScreen } from "@/components/splash-screen";
 import { FadeIn } from "@/components/fade-in";
 
+export const dynamic = 'force-dynamic';
+
 export default async function Home() {
   const allPosts = await getAllPosts();
 
