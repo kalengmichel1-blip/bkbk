@@ -9,7 +9,7 @@ export function CulturalBackground() {
                 - Blend mode applied for the "drawn on paper" look
             */}
             <div
-                className="absolute inset-0 w-full h-full opacity-[0.15] mix-blend-multiply"
+                className="absolute inset-0 w-full h-full opacity-[0.4] mix-blend-multiply"
                 style={{
                     backgroundImage: 'url("/images/drc-bg-pattern.png")',
                     backgroundRepeat: 'repeat',

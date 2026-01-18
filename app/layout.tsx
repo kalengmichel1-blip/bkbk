@@ -35,6 +35,7 @@ import { Spotlight } from "@/components/spotlight";
 import { VisitTracker } from "@/components/analytics/visit-tracker";
 import { CulturalBackground } from "@/components/cultural-background";
 import { BreakingNewsTicker } from "@/components/breaking-news";
+import { FloatingSocials } from "@/components/floating-socials";
 
 export default function RootLayout({
   children,
@@ -55,6 +56,7 @@ export default function RootLayout({
 
         <SiteHeader />
         <BreakingNewsTicker />
+        <FloatingSocials />
         <div className="flex-grow z-10">
           {children}
         </div>
