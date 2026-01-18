@@ -10,9 +10,10 @@ interface Props {
     onChange: (url: string) => void
 }
 
+import { uploadImage } from '@/app/admin/upload/action'
+
 export function ImageUploader({ value, onChange }: Props) {
     const [uploading, setUploading] = useState(false)
-    const supabase = createClient()
 
     const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         try {
@@ -20,22 +21,20 @@ export function ImageUploader({ value, onChange }: Props) {
             const file = e.target.files?.[0]
             if (!file) return
 
-            const fileExt = file.name.split('.').pop()
-            const fileName = `${Math.random()}.${fileExt}`
-            const filePath = `${fileName}`
+            const formData = new FormData()
+            formData.append('file', file)
 
-            const { error: uploadError } = await supabase.storage
-                .from('images')
-                .upload(filePath, file)
+            const result = await uploadImage(formData)
 
-            if (uploadError) {
-                throw uploadError
+            if (result.error) {
+                throw new Error(result.error)
             }
 
-            const { data } = supabase.storage.from('images').getPublicUrl(filePath)
-            onChange(data.publicUrl)
-        } catch (error) {
-            alert('Error uploading image!')
+            if (result.url) {
+                onChange(result.url)
+            }
+        } catch (error: any) {
+            alert(`Error uploading image: ${error.message}`)
             console.error(error)
         } finally {
             setUploading(false)

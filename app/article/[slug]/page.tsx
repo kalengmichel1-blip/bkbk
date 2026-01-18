@@ -5,6 +5,9 @@ import { notFound } from "next/navigation";
 import { format, parseISO } from "date-fns";
 import { ArrowLeft, Clock, Share2 } from "lucide-react";
 
+// Force dynamic rendering to ensure new articles are found immediately
+export const dynamic = 'force-dynamic'
+
 interface PageProps {
     params: Promise<{ slug: string }>;
 }

@@ -35,30 +35,39 @@ export function LoginForm() {
     return (
         <form onSubmit={handleLogin} className="space-y-4 w-full max-w-md">
             <div>
-                <label className="block text-sm font-medium mb-1">Email</label>
+                <label className="block text-sm font-bold text-gray-700 mb-1">Email</label>
                 <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="w-full p-2 rounded bg-white/5 border border-white/10 focus:border-white/30 outline-none"
+                    placeholder="Enter admin email"
+                    className="w-full p-3 rounded-md border border-gray-300 bg-white text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition-all shadow-sm"
                 />
             </div>
             <div>
-                <label className="block text-sm font-medium mb-1">Password</label>
+                <label className="block text-sm font-bold text-gray-700 mb-1">Password</label>
                 <input
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="w-full p-2 rounded bg-white/5 border border-white/10 focus:border-white/30 outline-none"
+                    placeholder="Enter password"
+                    className="w-full p-3 rounded-md border border-gray-300 bg-white text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition-all shadow-sm"
                 />
             </div>
-            {error && <p className="text-red-400 text-sm">{error}</p>}
+
+            <div className="flex justify-end">
+                <a href="/admin/forgot-password" className="text-sm text-blue-600 hover:text-blue-800 hover:underline">
+                    Forgot Password?
+                </a>
+            </div>
+
+            {error && <div className="bg-red-50 text-red-600 p-3 rounded border border-red-200 text-sm">{error}</div>}
             <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-white text-black font-bold py-2 rounded hover:bg-gray-200 transition-colors disabled:opacity-50 flex justify-center items-center"
+                className="w-full bg-brand-charcoal text-white font-bold py-3 rounded hover:bg-black transition-colors disabled:opacity-50 flex justify-center items-center shadow-lg hover:shadow-xl"
             >
                 {loading ? <Loader2 className="animate-spin" /> : 'Login'}
             </button>

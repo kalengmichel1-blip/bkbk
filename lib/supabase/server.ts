@@ -4,14 +4,14 @@ import { cookies } from 'next/headers'
 export async function createClient() {
     const cookieStore = await cookies()
 
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    const supabaseUrl = 'https://xhlioblejhalazlgvpiq.supabase.co'
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhobGlvYmxlamhhbGF6bGd2cGlxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg0MjQ0ODUsImV4cCI6MjA4NDAwMDQ4NX0.l_Se7PL3ELAdo5jawWxTsCYiCQB5y5l_lW2KxUBhFtU'
 
     console.log('Creating Supabase Client...');
     console.log('URL defined:', !!supabaseUrl);
     console.log('Key defined:', !!supabaseKey);
 
-    if (!supabaseUrl || !supabaseKey || supabaseUrl === 'your-project-url') {
+    if (!supabaseUrl || !supabaseKey) {
         console.error('Supabase credentials missing in Production!')
         // Return a dummy client that satisfies the interface but does nothing/throws clear error on use
         return {

@@ -32,11 +32,11 @@ export function getCategoryName(_id: number): string {
 
 // Create a safe client for static generation/public fetching
 const getSupabase = () => {
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    const url = 'https://xhlioblejhalazlgvpiq.supabase.co';
+    const key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhobGlvYmxlamhhbGF6bGd2cGlxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg0MjQ0ODUsImV4cCI6MjA4NDAwMDQ4NX0.l_Se7PL3ELAdo5jawWxTsCYiCQB5y5l_lW2KxUBhFtU';
 
     // Return a dummy client if config is missing or invalid to allow build to pass
-    if (!url || !key || url === 'your-project-url' || !url.startsWith('http')) {
+    if (!url || !key) {
         console.warn('Supabase not configured. Returning mock client.');
         return {
             from: () => ({
@@ -73,9 +73,11 @@ function mapSupabasePost(post: any): Post {
 
 export async function getAllPosts(): Promise<Post[]> {
     const supabase = getSupabase();
+
+    // Note: 'author:profiles(full_name)' join removed due to prod schema issue
     const { data } = await supabase
         .from('posts')
-        .select('*, author:profiles(full_name)')
+        .select('*')
         .eq('status', 'published')
         .order('published_at', { ascending: false });
 
@@ -89,7 +91,7 @@ export async function getLatestPosts(count: number): Promise<Post[]> {
     const supabase = getSupabase();
     const { data } = await supabase
         .from('posts')
-        .select('*, author:profiles(full_name)')
+        .select('*')
         .eq('status', 'published')
         .order('published_at', { ascending: false })
         .limit(count);
@@ -108,7 +110,7 @@ export async function getPostBySlug(slug: string): Promise<Post | undefined> {
     const supabase = getSupabase();
     const { data } = await supabase
         .from('posts')
-        .select('*, author:profiles(full_name)')
+        .select('*')
         .eq('slug', slug)
         .single();
 

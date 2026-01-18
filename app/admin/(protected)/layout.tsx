@@ -39,8 +39,15 @@ export default async function AdminLayout({
                         href="/admin/new"
                         className="flex items-center gap-3 px-4 py-2 rounded hover:bg-white/5 text-gray-300 hover:text-white transition-colors"
                     >
-                        <PlusCircle size={20} />
+                        <FileText size={20} />
                         New Article
+                    </Link>
+                    <Link
+                        href="/admin/users"
+                        className="flex items-center gap-3 px-4 py-2 rounded hover:bg-white/5 text-gray-300 hover:text-white transition-colors"
+                    >
+                        <PlusCircle size={20} />
+                        Team
                     </Link>
                     <div className="pt-4 mt-4 border-t border-white/10">
                         <div className="px-4 py-2 text-xs text-gray-500 uppercase font-semibold">
