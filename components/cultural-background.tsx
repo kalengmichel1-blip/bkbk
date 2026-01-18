@@ -11,7 +11,7 @@ export function CulturalBackground() {
             <div
                 className="absolute inset-0 w-full h-full opacity-[0.4] mix-blend-multiply"
                 style={{
-                    backgroundImage: 'url("/images/drc-bg-pattern.png")',
+                    backgroundImage: 'url("/images/drc-map-bg.png")',
                     backgroundRepeat: 'repeat',
                     backgroundSize: '400px', // Adjusted size for detail visibility
                     backgroundAttachment: 'fixed', // Simple CSS-only parallax effect
