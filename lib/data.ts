@@ -57,11 +57,23 @@ const getSupabase = () => {
 import { getBackfillImage } from "@/lib/image-map";
 
 function mapSupabasePost(post: any): Post {
-    // Check if we have a hardcoded override for this post ID
-    const overrideImage = getBackfillImage(post.id);
-    // Use override if available, otherwise fallback to DB value
-    // Prioritize override if DB value is missing or likely broken (e.g. empty)
-    const finalImage = overrideImage || post.featured_image;
+    // 1. Direct ID Override (Highest Priority)
+    let finalImage = getBackfillImage(post.id);
+
+    // 2. Keyword fallback (if no direct override and DB has no/bad image)
+    if (!finalImage && (!post.featured_image || post.featured_image.includes('wp-content') || post.featured_image.includes('wikimedia'))) {
+        const t = post.title.toLowerCase();
+        if (t.includes('trump') || t.includes('usa') || t.includes('washington') || t.includes('états-unis')) finalImage = '/assets/trump.jpg';
+        else if (t.includes('tshisekedi') || t.includes('fatshi') || t.includes('chef de l\'etat')) finalImage = '/assets/tshisekedi.jpg';
+        else if (t.includes('kabila') || t.includes('jkk')) finalImage = '/assets/kabila.jpg';
+        else if (t.includes('kagame') || t.includes('rwanda')) finalImage = '/assets/kagame.jpg';
+        else if (t.includes('sadc')) finalImage = '/assets/sadc-flag.svg';
+        else if (t.includes('eac')) finalImage = '/assets/eac-flag.svg';
+        else if (t.includes('rdc') || t.includes('congo') || t.includes('kinshasa')) finalImage = '/assets/drc-flag.svg';
+    }
+
+    // 3. Fallback to DB value if valid, or keep override
+    finalImage = finalImage || post.featured_image;
 
     return {
         id: post.id,
