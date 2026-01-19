@@ -40,3 +40,23 @@ export async function createUser(firstName: string, email: string, password: str
     revalidatePath('/admin/users')
     return { success: true }
 }
+
+export async function getUsers() {
+    const supabase = createAdminClient()
+
+    // Fetch profiles. Assuming 'profiles' wraps auth.users or syncs with it.
+    // If you want direct auth users, you use supabase.auth.admin.listUsers() 
+    // but typically we list profiles for application-level data.
+
+    const { data: profiles, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .order('created_at', { ascending: false })
+
+    if (error) {
+        console.error("Error fetching users:", error)
+        return []
+    }
+
+    return profiles
+}
