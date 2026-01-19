@@ -11,10 +11,12 @@ const IMAGES = [
     { name: 'sadc-flag.svg', url: 'https://upload.wikimedia.org/wikipedia/commons/e/ef/Flag_of_SADC.svg' },
     { name: 'rwanda-flag.svg', url: 'https://upload.wikimedia.org/wikipedia/commons/1/17/Flag_of_Rwanda.svg' },
     { name: 'usa-flag.svg', url: 'https://upload.wikimedia.org/wikipedia/commons/a/a4/Flag_of_the_United_States.svg' },
-    { name: 'un-flag.svg', url: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Flag_of_the_United_Nations.svg' }
+    { name: 'un-flag.svg', url: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Flag_of_the_United_Nations.svg' },
+    { name: 'covid.png', url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/SARS-CoV-2_without_background.png/640px-SARS-CoV-2_without_background.png' },
+    { name: 'music.png', url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Musical_Note.svg/640px-Musical_Note.svg.png' }
 ];
 
-const DEST_DIR = path.join(process.cwd(), 'public', 'images', 'backfill');
+const DEST_DIR = path.join(process.cwd(), 'public', 'assets');
 
 if (!fs.existsSync(DEST_DIR)) {
     fs.mkdirSync(DEST_DIR, { recursive: true });

@@ -60,16 +60,29 @@ function mapSupabasePost(post: any): Post {
     // 1. Direct ID Override (Highest Priority)
     let finalImage = getBackfillImage(post.id);
 
-    // 2. Keyword fallback (if no direct override and DB has no/bad image)
-    if (!finalImage && (!post.featured_image || post.featured_image.includes('wp-content') || post.featured_image.includes('wikimedia'))) {
+    // 2. Keyword fallback
+    if (!finalImage && (!post.featured_image || post.featured_image.includes('wp-content') || post.featured_image.includes('wikimedia') || post.id > 560)) {
+        // Note: ID Check > 560 is a heuristic for "Top 100-ish" or newer articles based on ID trends seen in logs, 
+        // to be aggressive about replacing "bad" images.
+
         const t = post.title.toLowerCase();
+
         if (t.includes('trump') || t.includes('usa') || t.includes('washington') || t.includes('états-unis')) finalImage = '/assets/trump.jpg';
         else if (t.includes('tshisekedi') || t.includes('fatshi') || t.includes('chef de l\'etat')) finalImage = '/assets/tshisekedi.jpg';
         else if (t.includes('kabila') || t.includes('jkk')) finalImage = '/assets/kabila.jpg';
         else if (t.includes('kagame') || t.includes('rwanda')) finalImage = '/assets/kagame.jpg';
+        else if (t.includes('covid') || t.includes('coronavirus') || t.includes('santé') || t.includes('virus') || t.includes('épidémie')) finalImage = '/assets/covid.png';
+        else if (t.includes('music') || t.includes('musique') || t.includes('jazz') || t.includes('artiste') || t.includes('album')) finalImage = '/assets/music.png';
         else if (t.includes('sadc')) finalImage = '/assets/sadc-flag.svg';
         else if (t.includes('eac')) finalImage = '/assets/eac-flag.svg';
         else if (t.includes('rdc') || t.includes('congo') || t.includes('kinshasa')) finalImage = '/assets/drc-flag.svg';
+        else if (t.includes('onu') || t.includes('un ') || t.includes('nations unies')) finalImage = '/assets/un-flag.svg';
+
+        // 3. Catch-all for "Top 100" (heuristic) if still undefined
+        // If we really want to ensure they have an image, fallback to DRC flag
+        if (!finalImage) {
+            finalImage = '/assets/drc-flag.svg';
+        }
     }
 
     // 3. Fallback to DB value if valid, or keep override
