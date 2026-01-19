@@ -61,9 +61,13 @@ function mapSupabasePost(post: any): Post {
     let finalImage = getBackfillImage(post.id);
 
     // 2. Keyword fallback
-    if (!finalImage && (!post.featured_image || post.featured_image.includes('wp-content') || post.featured_image.includes('wikimedia') || post.id > 560)) {
-        // Note: ID Check > 560 is a heuristic for "Top 100-ish" or newer articles based on ID trends seen in logs, 
-        // to be aggressive about replacing "bad" images.
+    // We only apply fallback if the current image is BROKEN (null, wp-content, wikimedia)
+    // AND it is NOT a fresh upload to Supabase Storage.
+    const isBroken = !post.featured_image || post.featured_image.includes('wp-content') || post.featured_image.includes('wikimedia');
+    const isSupabaseUpload = post.featured_image && post.featured_image.includes('supabase.co');
+
+    if (!finalImage && isBroken && !isSupabaseUpload) {
+        // Note: Removed the aggressive "post.id > 560" check because it was overwriting valid new uploads.
 
         const t = post.title.toLowerCase();
 
