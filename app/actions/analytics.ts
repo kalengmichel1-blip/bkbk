@@ -30,6 +30,14 @@ export async function getAnalyticsStats() {
         .from('analytics')
         .select('*', { count: 'exact', head: true })
 
+    // Visits Today
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    const { count: visitsToday } = await supabase
+        .from('analytics')
+        .select('*', { count: 'exact', head: true })
+        .gte('created_at', today.toISOString())
+
     // Top countries (Simulated aggregation since Supabase client doesn't do complex GROUP BY easily without RPC)
     // For a small scale, we can fetch latest 1000 or use a simpler approach. 
     // Ideally, we'd make a Postgres RPC function for this. 
@@ -53,6 +61,7 @@ export async function getAnalyticsStats() {
 
     return {
         totalVisits: totalVisits || 0,
+        visitsToday: visitsToday || 0,
         topCountries
     }
 }

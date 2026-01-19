@@ -1,62 +1,67 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { TrendingUp, Globe, Users, Activity } from 'lucide-react'
+import { TrendingUp, Globe, Activity, Eye, Calendar } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { createClient } from '@/lib/supabase/client'
 
 interface LiveAnalyticsProps {
     initialVisits: number
+    initialVisitsToday: number
     initialCountries: { name: string; count: number }[]
 }
 
-export function LiveAnalytics({ initialVisits, initialCountries }: LiveAnalyticsProps) {
-    const [visits, setVisits] = useState(initialVisits)
-    const [liveUsers, setLiveUsers] = useState(12) // Simulated live count
-    const [countries, setCountries] = useState(initialCountries)
+export function LiveAnalytics({ initialVisits, initialVisitsToday, initialCountries }: LiveAnalyticsProps) {
+    const [visits] = useState(initialVisits)
+    const [visitsToday] = useState(initialVisitsToday)
+    const [liveUsers, setLiveUsers] = useState(0)
+    const [activePages, setActivePages] = useState<Record<string, number>>({})
 
-    // Simulate "Live" activity
+    // Realtime Presence Logic
     useEffect(() => {
-        const interval = setInterval(() => {
-            // Randomly fluctuate live users between 8 and 25
-            setLiveUsers(prev => {
-                const change = Math.floor(Math.random() * 5) - 2 // -2 to +2
-                const newValue = Math.max(8, Math.min(25, prev + change))
-                return newValue
+        const supabase = createClient()
+        const channel = supabase.channel('online-users')
+
+        channel
+            .on('presence', { event: 'sync' }, () => {
+                const state = channel.presenceState()
+                const validUsers = Object.keys(state)
+                setLiveUsers(validUsers.length)
+
+                // Aggregate views
+                const pages: Record<string, number> = {}
+                Object.values(state).forEach((presences: any) => {
+                    presences.forEach((p: any) => {
+                        if (p.view) {
+                            pages[p.view] = (pages[p.view] || 0) + 1
+                        }
+                    })
+                })
+                setActivePages(pages)
             })
+            .subscribe()
 
-            // Very slowly increment total visits
-            if (Math.random() > 0.7) {
-                setVisits(prev => prev + 1)
-            }
-        }, 3000)
-
-        return () => clearInterval(interval)
+        return () => {
+            supabase.removeChannel(channel)
+        }
     }, [])
 
     return (
-        <div className="grid md:grid-cols-3 gap-6 mb-10">
-            {/* Total Visits */}
-            <div className="bg-white/5 border border-white/10 rounded-lg p-6">
-                <div className="flex items-center gap-4 mb-4">
-                    <div className="p-3 bg-blue-500/20 text-blue-400 rounded-full">
-                        <TrendingUp size={24} />
+        <div className="space-y-6 mb-10">
+            <div className="grid md:grid-cols-4 gap-6">
+                {/* Active Users (Realtime) */}
+                <div className="bg-white/5 border border-white/10 rounded-lg p-6 relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <Activity size={60} />
                     </div>
-                    <div>
-                        <p className="text-gray-400 text-sm">Total Visits</p>
-                        <h3 className="text-3xl font-bold">{visits.toLocaleString()}</h3>
+                    <div className="absolute top-2 right-2 flex items-center gap-1.5 px-2 py-1 bg-red-500/10 rounded text-xs font-bold text-red-400 animate-pulse">
+                        <div className="w-2 h-2 bg-red-500 rounded-full" />
+                        LIVE
                     </div>
-                </div>
-            </div>
-
-            {/* Live Users (New Real Time Widget) */}
-            <div className="bg-white/5 border border-white/10 rounded-lg p-6 relative overflow-hidden">
-                <div className="absolute top-2 right-2 flex items-center gap-1.5 px-2 py-1 bg-red-500/10 rounded text-xs font-bold text-red-400 animate-pulse">
-                    <div className="w-2 h-2 bg-red-500 rounded-full" />
-                    LIVE
-                </div>
-                <div className="flex items-center gap-4 mb-4">
-                    <div className="p-3 bg-red-500/20 text-red-400 rounded-full">
-                        <Activity size={24} />
+                    <div className="flex items-center gap-4 mb-2">
+                        <div className="p-3 bg-red-500/20 text-red-400 rounded-full">
+                            <Activity size={24} />
+                        </div>
                     </div>
                     <div>
                         <p className="text-gray-400 text-sm">Active Users Now</p>
@@ -70,31 +75,76 @@ export function LiveAnalytics({ initialVisits, initialCountries }: LiveAnalytics
                         </motion.h3>
                     </div>
                 </div>
-            </div>
 
-            {/* Top Countries */}
-            <div className="bg-white/5 border border-white/10 rounded-lg p-6">
-                <div className="flex items-center gap-4 mb-4">
-                    <div className="p-3 bg-green-500/20 text-green-400 rounded-full">
-                        <Globe size={24} />
+                {/* Visits Today */}
+                <div className="bg-white/5 border border-white/10 rounded-lg p-6 group">
+                    <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <Calendar size={60} />
                     </div>
-                    <div>
-                        <p className="text-gray-400 text-sm">Top Locations</p>
+                    <div className="flex items-center gap-4 mb-4">
+                        <div className="p-3 bg-purple-500/20 text-purple-400 rounded-full">
+                            <Calendar size={24} />
+                        </div>
+                        <div>
+                            <p className="text-gray-400 text-sm">Visits Today</p>
+                            <h3 className="text-3xl font-bold">{visitsToday.toLocaleString()}</h3>
+                        </div>
                     </div>
                 </div>
-                <div className="space-y-2">
-                    {countries.length > 0 ? (
-                        countries.slice(0, 3).map((c: any) => (
-                            <div key={c.name} className="flex justify-between text-sm">
-                                <span>{c.name === 'Unknown' ? 'Unknown Location' : c.name}</span>
+
+                {/* Total Visits */}
+                <div className="bg-white/5 border border-white/10 rounded-lg p-6 group">
+                    <div className="flex items-center gap-4 mb-4">
+                        <div className="p-3 bg-blue-500/20 text-blue-400 rounded-full">
+                            <TrendingUp size={24} />
+                        </div>
+                        <div>
+                            <p className="text-gray-400 text-sm">Total Visits</p>
+                            <h3 className="text-3xl font-bold">{visits.toLocaleString()}</h3>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Top Locations */}
+                <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+                    <div className="flex items-center gap-4 mb-4">
+                        <div className="p-3 bg-green-500/20 text-green-400 rounded-full">
+                            <Globe size={24} />
+                        </div>
+                        <div>
+                            <p className="text-gray-400 text-sm">Top Locations</p>
+                        </div>
+                    </div>
+                    <div className="space-y-1">
+                        {initialCountries.slice(0, 2).map((c: any) => (
+                            <div key={c.name} className="flex justify-between text-xs text-gray-300">
+                                <span className="truncate max-w-[100px]">{c.name === 'Unknown' ? 'Unknown' : c.name}</span>
                                 <span className="font-mono text-white/70">{c.count}</span>
                             </div>
-                        ))
-                    ) : (
-                        <p className="text-gray-500 text-xs">No location data yet</p>
-                    )}
+                        ))}
+                    </div>
                 </div>
             </div>
+
+            {/* Live Page Views Table */}
+            {liveUsers > 0 && (
+                <div className="bg-white/5 border border-white/10 rounded-lg p-6">
+                    <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
+                        <Eye size={20} className="text-blue-400" />
+                        Right Now Viewing
+                    </h3>
+                    <div className="space-y-2">
+                        {Object.entries(activePages).map(([page, count]) => (
+                            <div key={page} className="flex items-center justify-between p-3 bg-black/20 rounded hover:bg-white/5 transition-colors">
+                                <span className="text-sm font-mono text-blue-300 truncate">{page}</span>
+                                <span className="text-xs font-bold bg-blue-500/20 text-blue-300 px-2 py-1 rounded">
+                                    {count} {count === 1 ? 'viewer' : 'viewers'}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

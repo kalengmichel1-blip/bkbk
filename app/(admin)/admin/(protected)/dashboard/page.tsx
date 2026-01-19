@@ -40,11 +40,11 @@ export default async function DashboardPage({
             .select('id, title, slug, created_at, status, published_at', { count: 'exact' })
             .order('published_at', { ascending: false })
             .range(from, to),
-        getAnalyticsStats().catch(() => ({ totalVisits: 0, topCountries: [] }))
+        getAnalyticsStats().catch(() => ({ totalVisits: 0, visitsToday: 0, topCountries: [] }))
     ])
 
     const { data, error, count } = postsRes
-    const { totalVisits, topCountries } = analyticsRes
+    const { totalVisits, visitsToday, topCountries } = analyticsRes
 
     if (error) {
         return (
@@ -75,7 +75,11 @@ export default async function DashboardPage({
 
             {/* Analytics Section */}
             {/* Live Analytics Section */}
-            <LiveAnalytics initialVisits={totalVisits} initialCountries={topCountries} />
+            <LiveAnalytics
+                initialVisits={totalVisits}
+                initialVisitsToday={visitsToday}
+                initialCountries={topCountries}
+            />
 
             {/* Articles Table */}
             <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
