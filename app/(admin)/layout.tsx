@@ -1,16 +1,28 @@
 import type { Metadata } from "next";
 import { AdminSidebar } from "@/components/admin/sidebar";
+import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
     title: "Admin Dashboard | Team BKBK",
     description: "Content Management System",
 };
 
-export default function AdminLayout({
+export default async function AdminLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    const supabase = await createClient()
+
+    const {
+        data: { user },
+    } = await supabase.auth.getUser()
+
+    if (!user) {
+        redirect('/login')
+    }
+
     return (
         <div className="min-h-screen bg-gray-950 text-white flex">
             {/* Sidebar */}
