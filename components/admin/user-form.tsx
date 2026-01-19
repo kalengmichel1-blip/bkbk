@@ -8,6 +8,7 @@ export function UserForm() {
     const [firstName, setFirstName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [role, setRole] = useState('editor')
     const [loading, setLoading] = useState(false)
     const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null)
 
@@ -16,7 +17,7 @@ export function UserForm() {
         setLoading(true)
         setMessage(null)
 
-        const res = await createUser(firstName, email, password)
+        const res = await createUser(firstName, email, password, role)
 
         if (res.error) {
             setMessage({ type: 'error', text: res.error })
@@ -25,6 +26,7 @@ export function UserForm() {
             setFirstName('')
             setEmail('')
             setPassword('')
+            setRole('editor')
         }
         setLoading(false)
     }
@@ -59,6 +61,18 @@ export function UserForm() {
                         placeholder="user@example.com"
                         className="w-full p-3 rounded-lg border border-white/10 bg-black/20 text-white placeholder:text-gray-600 focus:ring-2 focus:ring-brand-gold focus:border-transparent outline-none transition-all"
                     />
+                </div>
+                <div>
+                    <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Role</label>
+                    <select
+                        value={role}
+                        onChange={(e) => setRole(e.target.value)}
+                        className="w-full p-3 rounded-lg border border-white/10 bg-black/20 text-white focus:ring-2 focus:ring-brand-gold focus:border-transparent outline-none transition-all"
+                    >
+                        <option value="admin">Admin (Full Access)</option>
+                        <option value="editor">Editor (Can Publish)</option>
+                        <option value="staff">Staff (Draft Only)</option>
+                    </select>
                 </div>
                 <div>
                     <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Default Password</label>

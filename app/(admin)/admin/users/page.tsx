@@ -51,10 +51,22 @@ export default async function UsersPage() {
                                             </div>
                                         </td>
                                         <td className="px-6 py-4">
-                                            <span className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-bold bg-purple-500/20 text-purple-400 border border-purple-500/20">
-                                                <Shield size={10} />
-                                                Admin
-                                            </span>
+                                            {user.role === 'admin' ? (
+                                                <span className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-bold bg-purple-500/20 text-purple-400 border border-purple-500/20 uppercase">
+                                                    <Shield size={10} />
+                                                    Admin
+                                                </span>
+                                            ) : user.role === 'editor' ? (
+                                                <span className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-bold bg-blue-500/20 text-blue-400 border border-blue-500/20 uppercase">
+                                                    <User size={10} />
+                                                    Editor
+                                                </span>
+                                            ) : (
+                                                <span className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-bold bg-gray-500/20 text-gray-400 border border-gray-500/20 uppercase">
+                                                    <User size={10} />
+                                                    {user.role || 'Staff'}
+                                                </span>
+                                            )}
                                         </td>
                                         <td className="px-6 py-4 text-sm text-gray-400">
                                             <div className="flex items-center gap-2">

@@ -3,7 +3,7 @@
 import { createAdminClient } from "@/lib/supabase/admin"
 import { revalidatePath } from "next/cache"
 
-export async function createUser(firstName: string, email: string, password: string) {
+export async function createUser(firstName: string, email: string, password: string, role: string) {
     const supabase = createAdminClient()
 
     const { data: user, error } = await supabase.auth.admin.createUser({
@@ -11,7 +11,8 @@ export async function createUser(firstName: string, email: string, password: str
         password: password,
         email_confirm: true,
         user_metadata: {
-            full_name: firstName // storing name in metadata for simplicity
+            full_name: firstName,
+            role: role // Store role in metadata for easy access in RLS
         }
     })
 
@@ -30,6 +31,7 @@ export async function createUser(firstName: string, email: string, password: str
             full_name: firstName,
             username: email.split('@')[0], // Generate simple username
             updated_at: new Date().toISOString(),
+            role: role // Try to insert role into profiles table
         })
 
     if (profileError) {
