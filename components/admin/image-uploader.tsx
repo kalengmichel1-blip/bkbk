@@ -10,7 +10,7 @@ interface Props {
     onChange: (url: string) => void
 }
 
-import { uploadImage } from '@/app/admin/upload/action'
+import { uploadImage } from '@/app/(admin)/admin/upload/action'
 
 export function ImageUploader({ value, onChange }: Props) {
     const [uploading, setUploading] = useState(false)

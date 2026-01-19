@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Trash2, Loader2 } from 'lucide-react'
-import { deletePost } from '@/app/admin/actions'
+import { deletePost } from '@/app/(admin)/admin/actions'
 
 export function DeletePostButton({ id }: { id: string }) {
     const [isDeleting, setIsDeleting] = useState(false)

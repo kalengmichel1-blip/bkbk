@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useFormStatus } from 'react-dom'
 import RichTextEditor from '@/components/editor/rich-text-editor'
 import { ImageUploader } from '@/components/admin/image-uploader'
-import { createPost, updatePost } from '@/app/admin/actions'
+import { createPost, updatePost } from '@/app/(admin)/admin/actions'
 import { Loader2 } from 'lucide-react'
 
 // Helper for slug generation

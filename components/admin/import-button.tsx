@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { seedPosts } from '@/app/admin/actions'
+import { seedPosts } from '@/app/(admin)/admin/actions'
 import { RefreshCw, Download } from 'lucide-react'
 
 export function ImportButton() {
