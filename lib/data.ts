@@ -54,7 +54,15 @@ const getSupabase = () => {
     return createClient(url, key);
 }
 
+import { getBackfillImage } from "@/lib/image-map";
+
 function mapSupabasePost(post: any): Post {
+    // Check if we have a hardcoded override for this post ID
+    const overrideImage = getBackfillImage(post.id);
+    // Use override if available, otherwise fallback to DB value
+    // Prioritize override if DB value is missing or likely broken (e.g. empty)
+    const finalImage = overrideImage || post.featured_image;
+
     return {
         id: post.id,
         date: post.published_at || post.created_at,
@@ -66,7 +74,7 @@ function mapSupabasePost(post: any): Post {
         author_name: post.author?.full_name || 'Team BKBK',
         categories: [],
         featured_media_id: 0,
-        featured_image_url: post.featured_image,
+        featured_image_url: finalImage,
         category_names: ['News'],
     };
 }
