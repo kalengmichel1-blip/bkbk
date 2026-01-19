@@ -1,5 +1,6 @@
 import { getUsers } from './actions'
 import { UserForm } from '@/components/admin/user-form'
+import { EditUserDialog } from '@/components/admin/edit-user-dialog'
 import { User, Shield, Calendar } from 'lucide-react'
 import { format } from 'date-fns'
 
@@ -73,6 +74,9 @@ export default async function UsersPage() {
                                                 <Calendar size={12} />
                                                 {format(new Date(user.created_at || new Date()), 'MMM d, yyyy')}
                                             </div>
+                                        </td>
+                                        <td className="px-6 py-4 text-right">
+                                            <EditUserDialog user={user} />
                                         </td>
                                     </tr>
                                 ))}

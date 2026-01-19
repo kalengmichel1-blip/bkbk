@@ -4,6 +4,7 @@ import { Plus, Pencil, Eye, TrendingUp, Globe } from 'lucide-react'
 import { DeletePostButton } from '@/components/admin/delete-post-button'
 import { ImportButton } from '@/components/admin/import-button'
 import { getAnalyticsStats } from '@/app/actions/analytics'
+import { LiveAnalytics } from '@/components/admin/live-analytics'
 
 import { format } from 'date-fns'
 
@@ -69,42 +70,8 @@ export default async function DashboardPage({
             </div>
 
             {/* Analytics Section */}
-            <div className="grid md:grid-cols-2 gap-6 mb-10">
-                <div className="bg-white/5 border border-white/10 rounded-lg p-6">
-                    <div className="flex items-center gap-4 mb-4">
-                        <div className="p-3 bg-blue-500/20 text-blue-400 rounded-full">
-                            <TrendingUp size={24} />
-                        </div>
-                        <div>
-                            <p className="text-gray-400 text-sm">Total Visits</p>
-                            <h3 className="text-3xl font-bold">{totalVisits.toLocaleString()}</h3>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="bg-white/5 border border-white/10 rounded-lg p-6">
-                    <div className="flex items-center gap-4 mb-4">
-                        <div className="p-3 bg-green-500/20 text-green-400 rounded-full">
-                            <Globe size={24} />
-                        </div>
-                        <div>
-                            <p className="text-gray-400 text-sm">Top Countries</p>
-                        </div>
-                    </div>
-                    <div className="space-y-2">
-                        {topCountries.length > 0 ? (
-                            topCountries.map((c: any) => (
-                                <div key={c.name} className="flex justify-between text-sm">
-                                    <span>{c.name === 'Unknown' ? 'Unknown Location' : c.name}</span>
-                                    <span className="font-mono text-white/70">{c.count}</span>
-                                </div>
-                            ))
-                        ) : (
-                            <p className="text-gray-500 text-xs">No location data yet</p>
-                        )}
-                    </div>
-                </div>
-            </div>
+            {/* Live Analytics Section */}
+            <LiveAnalytics initialVisits={totalVisits} initialCountries={topCountries} />
 
             {/* Articles Table */}
             <h2 className="text-xl font-bold mb-4 flex items-center gap-2">

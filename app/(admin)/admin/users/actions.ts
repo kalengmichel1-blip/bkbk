@@ -62,3 +62,35 @@ export async function getUsers() {
 
     return profiles
 }
+
+export async function updateUser(userId: string, fullName: string, role: string) {
+    const supabase = createAdminClient()
+
+    // 1. Update Profile
+    const { error: profileError } = await supabase
+        .from('profiles')
+        .update({
+            full_name: fullName,
+            role: role,
+            updated_at: new Date().toISOString()
+        })
+        .eq('id', userId)
+
+    if (profileError) {
+        return { error: profileError.message }
+    }
+
+    // 2. Update Auth Metadata (optional but good for consistency)
+    const { error: authError } = await supabase.auth.admin.updateUserById(
+        userId,
+        { user_metadata: { full_name: fullName, role: role } }
+    )
+
+    if (authError) {
+        console.error("Failed to sync auth metadata:", authError)
+        // Don't fail the whole request, as profile update succeeded
+    }
+
+    revalidatePath('/admin/users')
+    return { success: true }
+}
