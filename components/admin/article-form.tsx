@@ -74,10 +74,16 @@ export function ArticleForm({ post, role }: Props) {
         setSlug(slugify(newTitle))
     }
 
-    const action = post ? updatePost : createPost
+    const handleSubmit = async (formData: FormData) => {
+        if (post) {
+            await updatePost(formData)
+        } else {
+            await createPost(formData)
+        }
+    }
 
     return (
-        <form action={action} className="max-w-7xl mx-auto pb-20 px-4">
+        <form action={handleSubmit} className="max-w-7xl mx-auto pb-20 px-4">
             {post && <input type="hidden" name="id" value={post.id} />}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Main Content Column */}
