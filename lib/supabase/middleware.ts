@@ -55,10 +55,10 @@ export async function updateSession(request: NextRequest) {
         data: { user },
     } = await supabase.auth.getUser()
 
-    if (request.nextUrl.pathname.startsWith('/admin') && !request.nextUrl.pathname.startsWith('/admin/login')) {
+    if (request.nextUrl.pathname.startsWith('/admin')) {
         if (!user) {
             const url = request.nextUrl.clone()
-            url.pathname = '/admin/login'
+            url.pathname = '/login'
             return NextResponse.redirect(url)
         }
     }

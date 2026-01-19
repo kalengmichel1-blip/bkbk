@@ -35,25 +35,25 @@ export function LoginForm() {
     return (
         <form onSubmit={handleLogin} className="space-y-4 w-full max-w-md">
             <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1">Email</label>
+                <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Email</label>
                 <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    placeholder="Enter admin email"
-                    className="w-full p-3 rounded-md border border-gray-300 bg-white text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition-all shadow-sm"
+                    placeholder="name@example.com"
+                    className="w-full p-3 rounded-lg border border-white/10 bg-white/5 text-white placeholder:text-gray-600 focus:ring-2 focus:ring-brand-gold focus:border-transparent outline-none transition-all"
                 />
             </div>
             <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1">Password</label>
+                <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Password</label>
                 <input
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    placeholder="Enter password"
-                    className="w-full p-3 rounded-md border border-gray-300 bg-white text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition-all shadow-sm"
+                    placeholder="••••••••"
+                    className="w-full p-3 rounded-lg border border-white/10 bg-white/5 text-white placeholder:text-gray-600 focus:ring-2 focus:ring-brand-gold focus:border-transparent outline-none transition-all"
                 />
             </div>
 
@@ -67,9 +67,9 @@ export function LoginForm() {
             <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-brand-charcoal text-white font-bold py-3 rounded hover:bg-black transition-colors disabled:opacity-50 flex justify-center items-center shadow-lg hover:shadow-xl"
+                className="w-full bg-brand-gold text-charcoal-900 font-bold py-3 rounded-lg hover:bg-yellow-500 transition-all disabled:opacity-50 flex justify-center items-center shadow-lg hover:shadow-brand-gold/20"
             >
-                {loading ? <Loader2 className="animate-spin" /> : 'Login'}
+                {loading ? <Loader2 className="animate-spin" /> : 'Sign In'}
             </button>
         </form>
     )

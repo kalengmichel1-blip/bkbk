@@ -1,67 +1,38 @@
 import type { Metadata } from "next";
 import { Inter, Merriweather } from "next/font/google";
 import "./globals.css";
-import { SiteHeader } from "@/components/site-header";
-import { SiteFooter } from "@/components/site-footer";
 
 const inter = Inter({
-  variable: "--font-sans",
-  subsets: ["latin"],
-  display: "swap",
+    variable: "--font-sans",
+    subsets: ["latin"],
+    display: "swap",
 });
 
 const merriweather = Merriweather({
-  variable: "--font-serif",
-  subsets: ["latin"],
-  weight: ["300", "400", "700", "900"],
-  display: "swap",
+    variable: "--font-serif",
+    subsets: ["latin"],
+    weight: ["300", "400", "700", "900"],
+    display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Team BKBK | News & Analysis",
-  description: "Political thought, analysis, and news from Dr. Barnabé Kikaya Bin Karubi.",
-  keywords: ["DRC", "Congo", "Politics", "Diplomacy", "Barnabé Kikaya Bin Karubi", "Africa", "News", "Analysis"],
-  openGraph: {
-    type: "website",
-    locale: "en_US",
-    url: "https://kikayabinkarubi.net",
-    siteName: "Team BKBK",
-  }
+    title: "Team BKBK",
+    description: "Political thought, analysis, and news from Dr. Barnabé Kikaya Bin Karubi.",
 };
 
-import { SmoothScroll } from "@/components/smooth-scroll";
-import { GrainOverlay } from "@/components/grain-overlay";
-import { Spotlight } from "@/components/spotlight";
-import { VisitTracker } from "@/components/analytics/visit-tracker";
-import { CulturalBackground } from "@/components/cultural-background";
-import { BreakingNewsTicker } from "@/components/breaking-news";
-import { FloatingSocials } from "@/components/floating-socials";
-
 export default function RootLayout({
-  children,
+    children,
 }: Readonly<{
-  children: React.ReactNode;
+    children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en">
-      <body
-        suppressHydrationWarning
-        className={`${inter.variable} ${merriweather.variable} antialiased font-sans bg-white text-charcoal-900 flex flex-col min-h-screen relative`}
-      >
-        <Spotlight />
-        <SmoothScroll />
-        <GrainOverlay />
-        <CulturalBackground />
-        <VisitTracker />
-
-        <SiteHeader />
-        <BreakingNewsTicker />
-        <FloatingSocials />
-        <div className="flex-grow z-10">
-          {children}
-        </div>
-        <SiteFooter />
-      </body>
-    </html>
-  );
+    return (
+        <html lang="en">
+            <body
+                suppressHydrationWarning
+                className={`${inter.variable} ${merriweather.variable} antialiased font-sans bg-white text-charcoal-900`}
+            >
+                {children}
+            </body>
+        </html>
+    );
 }
