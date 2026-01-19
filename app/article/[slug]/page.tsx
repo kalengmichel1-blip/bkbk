@@ -12,12 +12,13 @@ interface PageProps {
     params: Promise<{ slug: string }>;
 }
 
-export async function generateStaticParams() {
-    const posts = await getAllPosts();
-    return posts.map((post) => ({
-        slug: post.slug,
-    }));
-}
+// generateStaticParams removed to force fully dynamic rendering
+// export async function generateStaticParams() {
+//     const posts = await getAllPosts();
+//     return posts.map((post) => ({
+//         slug: post.slug,
+//     }));
+// }
 
 export default async function ArticlePage({ params }: PageProps) {
     const { slug } = await params;
