@@ -7,6 +7,7 @@ import { getAnalyticsStats } from '@/app/actions/analytics'
 import { LiveAnalytics } from '@/components/admin/live-analytics'
 
 import { format } from 'date-fns'
+import { canDeletePost } from '@/lib/utils/permissions'
 
 interface Post {
     id: string
@@ -28,6 +29,9 @@ export default async function DashboardPage({
     const to = from + pageSize - 1
 
     const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    // Parallel fetching for performance
 
     // Parallel fetching for performance
     const [postsRes, analyticsRes] = await Promise.all([
@@ -124,7 +128,9 @@ export default async function DashboardPage({
                                         >
                                             <Pencil size={18} />
                                         </Link>
-                                        <DeletePostButton id={post.id} />
+                                        {canDeletePost(user?.user_metadata?.role) && (
+                                            <DeletePostButton id={post.id} />
+                                        )}
                                     </div>
                                 </td>
                             </tr>

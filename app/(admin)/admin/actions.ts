@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
+import { canDeletePost } from '@/lib/utils/permissions'
 
 export async function createPost(formData: FormData) {
     const supabase = await createClient()
@@ -33,26 +34,41 @@ export async function createPost(formData: FormData) {
     redirect('/admin/dashboard')
 }
 
-export async function updatePost(id: string, formData: FormData) {
+export async function updatePost(formData: FormData) {
     const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
 
+    if (!user) {
+        return { error: 'Unauthorized' }
+    }
+
+    const id = formData.get('id') as string
     const title = formData.get('title') as string
-    // const slug = formData.get('slug') as string // Ideally slugs shouldn't change to avoid breaking links, or handle redirects
-    const content = formData.get('content') as string
+    const slug = formData.get('slug') as string
     const excerpt = formData.get('excerpt') as string
+    const content = formData.get('content') as string
+    let status = formData.get('status') as string
+    const category = formData.get('category') as string
     const featured_image = formData.get('featured_image') as string
-    const status = formData.get('status') as string
+
+    // Enforce permissions: Staff can only create drafts
+    const role = user.user_metadata?.role
+    if (role === 'staff' && status === 'published') {
+        status = 'draft' // Force draft
+    }
 
     const { error } = await supabase
         .from('posts')
         .update({
             title,
-            // slug,
-            content,
+            slug,
             excerpt,
-            featured_image,
+            content,
             status,
-            updated_at: new Date().toISOString(),
+            category,
+            featured_image,
+            published_at: status === 'published' ? new Date().toISOString() : null,
+            updated_at: new Date().toISOString()
         })
         .eq('id', id)
 
@@ -68,6 +84,11 @@ export async function updatePost(id: string, formData: FormData) {
 
 export async function deletePost(id: string) {
     const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user || !canDeletePost(user.user_metadata?.role)) {
+        return { error: 'Unauthorized: Only admins can delete posts' }
+    }
 
     const { error } = await supabase
         .from('posts')
@@ -75,12 +96,12 @@ export async function deletePost(id: string) {
         .eq('id', id)
 
     if (error) {
-        console.error('Error deleting post:', error)
-        throw new Error('Failed to delete post')
+        return { error: error.message }
     }
 
     revalidatePath('/admin/dashboard')
     revalidatePath('/')
+    return { success: true }
 }
 
 export async function seedPosts() {

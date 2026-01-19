@@ -28,12 +28,21 @@ interface Post {
     status: string
 }
 
+import { canPublishPost } from '@/lib/utils/permissions'
+
 interface Props {
     post?: Post
+    role?: string
 }
 
-function SubmitButton({ isDraft }: { isDraft: boolean }) {
+function SubmitButton({ isDraft, role }: { isDraft: boolean; role?: string }) {
     const { pending } = useFormStatus()
+
+    // If not draft (i.e. Publish) and user cannot publish, disable it
+    if (!isDraft && !canPublishPost(role)) {
+        return null // Don't even show publish button for staff
+    }
+
     return (
         <button
             type="submit"
@@ -51,7 +60,7 @@ function SubmitButton({ isDraft }: { isDraft: boolean }) {
     )
 }
 
-export function ArticleForm({ post }: Props) {
+export function ArticleForm({ post, role }: Props) {
     const [title, setTitle] = useState(post?.title || '')
     const [slug, setSlug] = useState(post?.slug || '')
     const [content, setContent] = useState(post?.content || '')
@@ -65,10 +74,11 @@ export function ArticleForm({ post }: Props) {
         setSlug(slugify(newTitle))
     }
 
-    const action = post ? updatePost.bind(null, post.id!) : createPost
+    const action = post ? updatePost : createPost
 
     return (
         <form action={action} className="max-w-7xl mx-auto pb-20 px-4">
+            {post && <input type="hidden" name="id" value={post.id} />}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Main Content Column */}
                 <div className="lg:col-span-2 space-y-8">
@@ -148,8 +158,8 @@ export function ArticleForm({ post }: Props) {
                             </div>
 
                             <div className="grid grid-cols-1 gap-4 pt-2">
-                                <SubmitButton isDraft={false} />
-                                <SubmitButton isDraft={true} />
+                                <SubmitButton isDraft={false} role={role} />
+                                <SubmitButton isDraft={true} role={role} />
                             </div>
                         </div>
                     </div>

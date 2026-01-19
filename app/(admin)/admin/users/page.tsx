@@ -4,7 +4,19 @@ import { EditUserDialog } from '@/components/admin/edit-user-dialog'
 import { User, Shield, Calendar } from 'lucide-react'
 import { format } from 'date-fns'
 
+import { createClient } from '@/lib/supabase/server'
+import { redirect } from 'next/navigation'
+import { canManageUsers } from '@/lib/utils/permissions'
+
 export default async function UsersPage() {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    // Server-side permission check
+    if (!user || !canManageUsers(user.user_metadata?.role)) {
+        redirect('/admin/dashboard')
+    }
+
     const users = await getUsers()
 
     return (

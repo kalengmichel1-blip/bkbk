@@ -24,14 +24,13 @@ export default async function EditArticlePage({ params }: Props) {
         notFound()
     }
 
+    const { data: { user } } = await supabase.auth.getUser()
+    const role = user?.user_metadata?.role
+
     return (
         <div>
             <h1 className="text-3xl font-bold mb-8">Edit Article</h1>
-            {/* 
-        We need to make sure the post object strictly matches what ArticleForm expects.
-        Supabase returns everything, which is good.
-      */}
-            <ArticleForm post={{ ...post, id: String(post.id) }} />
+            <ArticleForm post={{ ...post, id: String(post.id) }} role={role} />
         </div>
     )
 }
