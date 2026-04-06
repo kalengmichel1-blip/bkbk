@@ -9,7 +9,6 @@ export default function ForgotPasswordPage() {
     const [email, setEmail] = useState('')
     const [loading, setLoading] = useState(false)
     const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null)
-    const supabase = createClient()
 
     const handleReset = async (e: React.FormEvent) => {
         e.preventDefault()

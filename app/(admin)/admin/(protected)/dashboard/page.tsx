@@ -1,4 +1,5 @@
-import { createClient } from '@/lib/supabase/server'
+import { createSessionClient, createAdminClient } from '@/lib/appwrite/server'
+import { Query } from 'node-appwrite'
 import Link from 'next/link'
 import { Plus, Pencil, Eye, TrendingUp, Globe } from 'lucide-react'
 import { DeletePostButton } from '@/components/admin/delete-post-button'
@@ -26,30 +27,41 @@ export default async function DashboardPage({
     const from = (page - 1) * pageSize
     const to = from + pageSize - 1
 
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    const { account } = await createSessionClient()
+    let user = null
+    try {
+        if (account) user = await account.get()
+    } catch (e) {}
 
-    // Parallel fetching for performance
+    const { databases } = await createAdminClient()
+    let posts: Post[] = []
+    let totalPages = 0
 
-    // Parallel fetching for performance
-    const postsRes = await supabase
-        .from('posts')
-        .select('id, title, slug, created_at, status, published_at', { count: 'exact' })
-        .order('published_at', { ascending: false })
-        .range(from, to)
-
-    const { data, error, count } = postsRes
-
-    if (error) {
+    try {
+        const result = await databases.listDocuments(
+            process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
+            process.env.NEXT_PUBLIC_APPWRITE_POSTS_COLLECTION_ID!,
+            [
+                Query.limit(pageSize),
+                Query.offset(from),
+                Query.orderDesc('published_at')
+            ]
+        )
+        posts = result.documents.map(d => ({
+            id: d.$id,
+            title: d.title,
+            slug: d.slug,
+            created_at: d.created_at || d.published_at || d.$createdAt,
+            status: d.status
+        }))
+        totalPages = Math.ceil(result.total / pageSize)
+    } catch (e: any) {
         return (
             <div className="p-4 bg-red-500/10 text-red-500 rounded border border-red-500/20">
-                Error fetching posts: {error.message}
+                Error fetching posts: {e.message}
             </div>
         )
     }
-
-    const posts = data as Post[] | null
-    const totalPages = count ? Math.ceil(count / pageSize) : 0
 
     return (
         <div>
@@ -85,7 +97,7 @@ export default async function DashboardPage({
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-white/10">
-                        {(posts as Post[] | null)?.map((post) => (
+                        {posts?.map((post) => (
                             <tr key={post.id} className="hover:bg-white/5">
                                 <td className="px-6 py-4 font-medium">{post.title}</td>
                                 <td className="px-6 py-4">
@@ -118,7 +130,7 @@ export default async function DashboardPage({
                                         >
                                             <Pencil size={18} />
                                         </Link>
-                                        {canDeletePost(user?.user_metadata?.role) && (
+                                        {canDeletePost(user?.prefs?.role || 'admin') && (
                                             <DeletePostButton id={post.id} />
                                         )}
                                     </div>

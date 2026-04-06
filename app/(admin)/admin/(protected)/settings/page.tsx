@@ -12,7 +12,6 @@ export default function SettingsPage() {
     const [error, setError] = useState<string | null>(null)
     const [success, setSuccess] = useState<string | null>(null)
     const router = useRouter()
-    const supabase = createClient()
 
     const handleUpdatePassword = async (e: React.FormEvent) => {
         e.preventDefault()

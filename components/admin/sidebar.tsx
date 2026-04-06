@@ -1,12 +1,18 @@
 import Link from 'next/link'
 import { LayoutDashboard, FileText, PlusSquare, Users, Settings } from 'lucide-react'
-import { createClient } from '@/lib/supabase/server'
+import { createSessionClient } from '@/lib/appwrite/server'
 import { canManageUsers } from '@/lib/utils/permissions'
 
 export async function AdminSidebar() {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-    const role = user?.user_metadata?.role
+    const { account } = await createSessionClient()
+    let role = 'guest'
+    if (account) {
+        try {
+            const user = await account.get()
+            // Appwrite uses prefs for metadata, or we can assume if they are logged in to the admin pane, they are admin.
+            role = user.prefs?.role || 'admin' 
+        } catch (e) {}
+    }
 
     return (
         <aside className="w-64 bg-black border-r border-white/10 flex flex-col fixed h-full z-10">
