@@ -1,0 +1,198 @@
+
+> bkbk@0.1.0 build
+> next build
+
+Γû▓ Next.js 16.1.1 (Turbopack)
+- Environments: .env.local
+
+ΓÜá The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+  Creating an optimized production build ...
+
+> Build error occurred
+Error: Turbopack build failed with 6 errors:
+./lib/data.ts:154:23
+Ecmascript file had an error
+  152 | }
+  153 |
+> 154 | export async function getAllPosts(): Promise<Post[]> {
+      |                       ^^^^^^^^^^^
+  155 |     const supabase = createClient();
+  156 |     const { data } = await supabase
+  157 |         .from('posts')
+
+the name `getAllPosts` is defined multiple times
+
+Import traces:
+  Server Component:
+    ./lib/data.ts
+    ./app/article/[slug]/page.tsx
+
+  Client Component Browser:
+    ./lib/data.ts [Client Component Browser]
+    ./components/hero-section.tsx [Client Component Browser]
+    ./components/hero-section.tsx [Server Component]
+    ./app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./lib/data.ts [Client Component SSR]
+    ./components/hero-section.tsx [Client Component SSR]
+    ./components/hero-section.tsx [Server Component]
+    ./app/page.tsx [Server Component]
+
+
+./lib/data.ts:132:17
+Ecmascript file had an error
+  130 | }
+  131 |
+> 132 | export function getCategoryName(_id: number): string {
+      |                 ^^^^^^^^^^^^^^^
+  133 |     return "News";
+  134 | }
+  135 |
+
+the name `getCategoryName` is defined multiple times
+
+Import traces:
+  Server Component:
+    ./lib/data.ts
+    ./app/article/[slug]/page.tsx
+
+  Client Component Browser:
+    ./lib/data.ts [Client Component Browser]
+    ./components/hero-section.tsx [Client Component Browser]
+    ./components/hero-section.tsx [Server Component]
+    ./app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./lib/data.ts [Client Component SSR]
+    ./components/hero-section.tsx [Client Component SSR]
+    ./components/hero-section.tsx [Server Component]
+    ./app/page.tsx [Server Component]
+
+
+./lib/data.ts:168:23
+Ecmascript file had an error
+  166 | }
+  167 |
+> 168 | export async function getLatestPosts(count: number): Promise<Post[]> {
+      |                       ^^^^^^^^^^^^^^
+  169 |     const supabase = createClient();
+  170 |     const { data } = await supabase
+  171 |         .from('posts')
+
+the name `getLatestPosts` is defined multiple times
+
+Import traces:
+  Server Component:
+    ./lib/data.ts
+    ./app/article/[slug]/page.tsx
+
+  Client Component Browser:
+    ./lib/data.ts [Client Component Browser]
+    ./components/hero-section.tsx [Client Component Browser]
+    ./components/hero-section.tsx [Server Component]
+    ./app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./lib/data.ts [Client Component SSR]
+    ./components/hero-section.tsx [Client Component SSR]
+    ./components/hero-section.tsx [Server Component]
+    ./app/page.tsx [Server Component]
+
+
+./lib/data.ts:187:23
+Ecmascript file had an error
+  185 | }
+  186 |
+> 187 | export async function getPostBySlug(slug: string): Promise<Post | undefined> {
+      |                       ^^^^^^^^^^^^^
+  188 |     const supabase = createClient();
+  189 |     const { data } = await supabase
+  190 |         .from('posts')
+
+the name `getPostBySlug` is defined multiple times
+
+Import traces:
+  Server Component:
+    ./lib/data.ts
+    ./app/article/[slug]/page.tsx
+
+  Client Component Browser:
+    ./lib/data.ts [Client Component Browser]
+    ./components/hero-section.tsx [Client Component Browser]
+    ./components/hero-section.tsx [Server Component]
+    ./app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./lib/data.ts [Client Component SSR]
+    ./components/hero-section.tsx [Client Component SSR]
+    ./components/hero-section.tsx [Server Component]
+    ./app/page.tsx [Server Component]
+
+
+./lib/data.ts:183:23
+Ecmascript file had an error
+  181 | }
+  182 |
+> 183 | export async function getPostsByCategory(_slug: string): Promise<Post[]> {
+      |                       ^^^^^^^^^^^^^^^^^^
+  184 |     return getAllPosts();
+  185 | }
+  186 |
+
+the name `getPostsByCategory` is defined multiple times
+
+Import traces:
+  Server Component:
+    ./lib/data.ts
+    ./app/article/[slug]/page.tsx
+
+  Client Component Browser:
+    ./lib/data.ts [Client Component Browser]
+    ./components/hero-section.tsx [Client Component Browser]
+    ./components/hero-section.tsx [Server Component]
+    ./app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./lib/data.ts [Client Component SSR]
+    ./components/hero-section.tsx [Client Component SSR]
+    ./components/hero-section.tsx [Server Component]
+    ./app/page.tsx [Server Component]
+
+
+./lib/data.ts:137:10
+Ecmascript file had an error
+  135 |
+  136 | // Helper to map Supabase result to Post interface
+> 137 | function mapSupabasePost(post: any): Post {
+      |          ^^^^^^^^^^^^^^^
+  138 |     return {
+  139 |         id: post.id,
+  140 |         date: post.published_at || post.created_at,
+
+the name `mapSupabasePost` is defined multiple times
+
+Import traces:
+  Server Component:
+    ./lib/data.ts
+    ./app/article/[slug]/page.tsx
+
+  Client Component Browser:
+    ./lib/data.ts [Client Component Browser]
+    ./components/hero-section.tsx [Client Component Browser]
+    ./components/hero-section.tsx [Server Component]
+    ./app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./lib/data.ts [Client Component SSR]
+    ./components/hero-section.tsx [Client Component SSR]
+    ./components/hero-section.tsx [Server Component]
+    ./app/page.tsx [Server Component]
+
+
+    at <unknown> (./lib/data.ts:154:23)
+    at <unknown> (./lib/data.ts:132:17)
+    at <unknown> (./lib/data.ts:168:23)
+    at <unknown> (./lib/data.ts:187:23)
+    at <unknown> (./lib/data.ts:183:23)
+    at <unknown> (./lib/data.ts:137:10)

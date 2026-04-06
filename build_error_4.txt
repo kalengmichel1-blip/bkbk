@@ -1,0 +1,52 @@
+
+> bkbk@0.1.0 build
+> next build
+
+Γû▓ Next.js 16.1.1 (Turbopack)
+- Environments: .env.local
+
+ΓÜá The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+  Creating an optimized production build ...
+Γ£ô Compiled successfully in 9.0s
+  Running TypeScript ...
+  Collecting page data using 15 workers ...
+Supabase not configured. Returning mock client.
+  Generating static pages using 15 workers (0/16) ...
+  Generating static pages using 15 workers (4/16) 
+Supabase not configured. Returning mock client.
+  Generating static pages using 15 workers (8/16) 
+Supabase not configured. Returning mock client.
+Supabase not configured. Returning mock client.
+Supabase not configured. Returning mock client.
+Supabase not configured. Returning mock client.
+Supabase not configured. Returning mock client.
+Supabase not configured. Returning mock client.
+  Generating static pages using 15 workers (12/16) 
+Γ£ô Generating static pages using 15 workers (16/16) in 1250.4ms
+  Finalizing page optimization ...
+
+Route (app)
+Γöî Γùï /
+Γö£ Γùï /_not-found
+Γö£ Γùï /about
+Γö£ ╞Æ /admin/dashboard
+Γö£ ╞Æ /admin/edit/[id]
+Γö£ ╞Æ /admin/login
+Γö£ ╞Æ /admin/migrate
+Γö£ ╞Æ /admin/new
+Γö£ ΓùÅ /article/[slug]
+Γö£ ΓùÅ /category/[slug]
+Γöé Γö£ /category/news
+Γöé Γö£ /category/analysis
+Γöé Γö£ /category/opinion
+Γöé Γöö [+3 more paths]
+Γö£ Γùï /drc-history
+Γöö Γùï /icon.png
+
+
+╞Æ Proxy (Middleware)
+
+Γùï  (Static)   prerendered as static content
+ΓùÅ  (SSG)      prerendered as static HTML (uses generateStaticParams)
+╞Æ  (Dynamic)  server-rendered on demand
+
