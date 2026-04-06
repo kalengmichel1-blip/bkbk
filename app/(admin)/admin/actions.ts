@@ -13,8 +13,12 @@ export async function loginAction(formData: FormData) {
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
     
-    // We must use admin client to create session, as we don't have a session yet
-    const { account } = await createAdminClient();
+    const { Client, Account } = await import('node-appwrite');
+    const client = new Client()
+        .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
+        .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT!);
+    
+    const account = new Account(client);
     
     try {
         const session = await account.createEmailPasswordSession(email, password);
