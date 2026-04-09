@@ -11,7 +11,8 @@ export async function GET() {
     try {
         const result = await databases.listDocuments(DB_ID, POSTS_COLLECTION, [Query.limit(1)]);
         return NextResponse.json({ count: result.total })
-    } catch (error: any) {
-        return NextResponse.json({ error: error.message }, { status: 500 })
+    } catch (error) {
+        const message = error instanceof Error ? error.message : 'Server error';
+        return NextResponse.json({ error: message }, { status: 500 })
     }
 }

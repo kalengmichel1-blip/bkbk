@@ -33,8 +33,9 @@ export async function loginAction(formData: FormData) {
         });
         
         return { success: true };
-    } catch (error: any) {
-        return { error: error.message };
+    } catch (error) {
+        const message = error instanceof Error ? error.message : 'Login failed';
+        return { error: message };
     }
 }
 
@@ -77,7 +78,7 @@ export async function createPost(formData: FormData) {
             featured_image,
             status,
         })
-    } catch (error: any) {
+    } catch (error) {
         console.error('Error creating post:', error)
         throw new Error('Failed to create post')
     }
@@ -127,7 +128,7 @@ export async function updatePost(formData: FormData) {
             published_at: status === 'published' ? new Date().toISOString() : null,
             updated_at: new Date().toISOString()
         })
-    } catch (error: any) {
+    } catch (error) {
         console.error('Error updating post:', error)
         throw new Error('Failed to update post')
     }
@@ -152,8 +153,9 @@ export async function deletePost(id: string) {
 
     try {
         await databases.deleteDocument(DB_ID, POSTS_COLLECTION, id)
-    } catch (error: any) {
-        return { error: error.message }
+    } catch (error) {
+        const message = error instanceof Error ? error.message : 'Delete failed';
+        return { error: message }
     }
 
     revalidatePath('/admin/dashboard')
@@ -180,7 +182,16 @@ export async function seedPosts() {
         const fileContents = fs.readFileSync(path.join(jsonDirectory, 'posts.json'), 'utf8')
         const posts = JSON.parse(fileContents)
 
-        const formattedPosts = posts.map((post: any) => ({
+interface SeedPost {
+    title: string;
+    slug: string;
+    content: string;
+    excerpt: string;
+    featured_image_url: string;
+    date: string;
+}
+
+        const formattedPosts = (posts as SeedPost[]).map((post) => ({
             title: post.title.replace(/&#8220;|&#8221;/g, '"').replace(/&#8217;/g, "'").replace(/&nbsp;/g, ' '),
             slug: post.slug,
             content: post.content,
@@ -202,7 +213,7 @@ export async function seedPosts() {
             for (const item of batch) {
                 try {
                     await databases.createDocument(DB_ID, POSTS_COLLECTION, ID.unique(), item);
-                } catch (err: any) {
+                } catch (err) {
                     console.error(`Seed loop error mapping item ${item.slug}:`, err);
                     // continue seeding other posts
                 }
@@ -213,8 +224,9 @@ export async function seedPosts() {
 
         revalidatePath('/admin/dashboard')
         return { success: true, count: posts.length }
-    } catch (e: any) {
+    } catch (e) {
         console.error('Seed exception:', e)
-        throw new Error(e.message || 'Failed to seed posts')
+        const message = e instanceof Error ? e.message : 'Failed to seed posts';
+        throw new Error(message)
     }
 }

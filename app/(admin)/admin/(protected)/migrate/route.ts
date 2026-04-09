@@ -58,10 +58,19 @@ export async function GET(request: Request) {
             return NextResponse.json({ message: 'No posts found in WP' })
         }
 
-        let importedCount = 0
-        let errors = []
+interface WPPost {
+    slug: string;
+    title: string;
+    content: string;
+    excerpt: string;
+    date: string;
+    featuredImage?: { node?: { sourceUrl?: string } };
+}
 
-        for (const post of (posts as any[])) {
+        let importedCount = 0
+        const errors: { slug: string; error: string }[] = []
+
+        for (const post of (posts as WPPost[])) {
             try {
                 await databases.createDocument(DB_ID, POSTS_COLLECTION, ID.unique(), {
                     slug: post.slug, 
@@ -74,8 +83,9 @@ export async function GET(request: Request) {
                     author_id: user.$id,
                 })
                 importedCount++
-            } catch (error: any) {
-                errors.push({ slug: post.slug, error: error.message })
+            } catch (error) {
+                const message = error instanceof Error ? error.message : 'Import failed';
+                errors.push({ slug: post.slug, error: message })
             }
         }
 
@@ -86,7 +96,8 @@ export async function GET(request: Request) {
             errors
         })
 
-    } catch (err: any) {
-        return NextResponse.json({ error: err.message }, { status: 500 })
+    } catch (err) {
+        const message = err instanceof Error ? err.message : 'Migration failed';
+        return NextResponse.json({ error: message }, { status: 500 })
     }
 }

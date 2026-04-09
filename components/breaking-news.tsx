@@ -11,7 +11,7 @@ export function BreakingNewsTicker() {
             try {
                 // BBC Africa News RSS Feed via RSS2JSON proxy
                 // Note: We use a proxy because we cannot fetch XML directly from the browser (CORS)
-                const RSS_URL = 'http://feeds.bbci.co.uk/news/world/africa/rss.xml';
+                const RSS_URL = 'https://feeds.bbci.co.uk/news/world/africa/rss.xml';
                 const PROXY_URL = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(RSS_URL)}`;
 
                 const res = await fetch(PROXY_URL);

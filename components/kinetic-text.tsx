@@ -19,21 +19,19 @@ export function KineticText({ children, className }: { children: string; classNa
             opacity: 1,
             y: 0,
             transition: {
-                type: "spring",
+                type: "spring" as const,
                 damping: 12,
                 stiffness: 100,
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            } as any,
+            },
         },
         hidden: {
             opacity: 0,
             y: 20,
             transition: {
-                type: "spring",
+                type: "spring" as const,
                 damping: 12,
                 stiffness: 100,
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            } as any,
+            },
         },
     };
 

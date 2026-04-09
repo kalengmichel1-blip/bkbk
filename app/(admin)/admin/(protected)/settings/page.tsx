@@ -38,8 +38,8 @@ export default function SettingsPage() {
             setSuccess("Password updated successfully")
             setPassword('')
             setConfirmPassword('')
-        } catch (error: any) {
-            setError(error.message)
+        } catch (error) {
+            setError(error instanceof Error ? error.message : 'Failed to update password')
         }
         
         setLoading(false)

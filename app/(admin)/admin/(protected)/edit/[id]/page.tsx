@@ -38,7 +38,15 @@ export default async function EditArticlePage({ params }: Props) {
     return (
         <div>
             <h1 className="text-3xl font-bold mb-8">Edit Article</h1>
-            <ArticleForm post={{ ...(post as any), id: String(post.$id) }} role={role} />
+            <ArticleForm post={{
+                id: post.$id,
+                title: (post.title as string) ?? '',
+                slug: (post.slug as string) ?? '',
+                content: (post.content as string) ?? '',
+                excerpt: (post.excerpt as string) ?? '',
+                featured_image: (post.featured_image as string) ?? '',
+                status: (post.status as string) ?? 'draft',
+            }} role={role} />
         </div>
     )
 }

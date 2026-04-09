@@ -32,8 +32,9 @@ export function ImageUploader({ value, onChange }: Props) {
             if (result.url) {
                 onChange(result.url)
             }
-        } catch (error: any) {
-            alert(`Error uploading image: ${error.message}`)
+        } catch (error) {
+            const message = error instanceof Error ? error.message : 'Upload failed';
+            alert(`Error uploading image: ${message}`)
             console.error(error)
         } finally {
             setUploading(false)

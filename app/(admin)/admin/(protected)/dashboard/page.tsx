@@ -55,10 +55,11 @@ export default async function DashboardPage({
             status: d.status
         }))
         totalPages = Math.ceil(result.total / pageSize)
-    } catch (e: any) {
+    } catch (e) {
+        const message = e instanceof Error ? e.message : 'Failed to fetch posts';
         return (
             <div className="p-4 bg-red-500/10 text-red-500 rounded border border-red-500/20">
-                Error fetching posts: {e.message}
+                Error fetching posts: {message}
             </div>
         )
     }

@@ -30,7 +30,7 @@ export interface Category {
     parent: number;
 }
 
-export function getCategoryName(_id: number): string {
+export function getCategoryName(_categoryId: number): string {
     return "News";
 }
 
@@ -42,7 +42,25 @@ const getAppwrite = () => {
 
 import { getBackfillImage } from "@/lib/image-map";
 
-function mapSupabasePost(post: any): Post {
+interface AppwriteDocument {
+    $id?: string;
+    $createdAt?: string;
+    id?: number | string;
+    title: string;
+    slug: string;
+    content?: string;
+    excerpt?: string;
+    published_at?: string;
+    created_at?: string;
+    featured_image?: string;
+    author_id?: string;
+    author?: {
+        full_name?: string | null;
+        avatar_url?: string | null;
+    };
+}
+
+function mapSupabasePost(post: AppwriteDocument): Post {
     // 1. Direct ID Override (Highest Priority)
     let finalImage = getBackfillImage(post.id);
 
@@ -101,10 +119,10 @@ export async function getAllPosts(): Promise<Post[]> {
         const { documents } = await databases.listDocuments(DB_ID, POSTS_COLLECTION, [
             Query.equal('status', 'published'),
             Query.orderDesc('published_at'),
-            // Optionally add limit if you expect a huge number, e.g. Query.limit(100)
+            Query.limit(100),
         ]);
 
-        return documents.map(mapSupabasePost);
+        return (documents as unknown as AppwriteDocument[]).map(mapSupabasePost);
     } catch (e) {
         console.error("Error fetching all posts:", e);
         return [];
@@ -121,14 +139,14 @@ export async function getLatestPosts(count: number): Promise<Post[]> {
             Query.limit(count)
         ]);
 
-        return documents.map(mapSupabasePost);
+        return (documents as unknown as AppwriteDocument[]).map(mapSupabasePost);
     } catch (e) {
         console.error("Error fetching latest posts:", e);
         return [];
     }
 }
 
-export async function getPostsByCategory(_slug: string): Promise<Post[]> {
+export async function getPostsByCategory(_categorySlug: string): Promise<Post[]> {
     return getAllPosts();
 }
 
@@ -143,7 +161,7 @@ export async function getPostBySlug(slug: string): Promise<Post | undefined> {
 
         if (documents.length === 0) return undefined;
 
-        return mapSupabasePost(documents[0]);
+        return mapSupabasePost(documents[0] as unknown as AppwriteDocument);
     } catch (e) {
         console.error("Error fetching post by slug:", e);
         return undefined;
