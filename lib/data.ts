@@ -5,7 +5,7 @@ const DB_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!;
 const POSTS_COLLECTION = process.env.NEXT_PUBLIC_APPWRITE_POSTS_COLLECTION_ID!;
 
 export interface Post {
-    id: number;
+    id: number | string;
     date: string;
     slug: string;
     title: string;
@@ -62,7 +62,7 @@ interface AppwriteDocument {
 
 function mapSupabasePost(post: AppwriteDocument): Post {
     // 1. Direct ID Override (Highest Priority)
-    let finalImage = getBackfillImage(post.id);
+    let finalImage = getBackfillImage(Number(post.id || post.$id || 0));
 
     // 2. Keyword fallback
     // We only apply fallback if the current image is BROKEN (null, wp-content, wikimedia)
@@ -94,16 +94,16 @@ function mapSupabasePost(post: AppwriteDocument): Post {
     }
 
     // 3. Fallback to DB value if valid, or keep override
-    finalImage = finalImage || post.featured_image;
+    finalImage = finalImage || post.featured_image || null;
 
     return {
-        id: post.$id || post.id, // Support Appwrite ID or legacy ID if preserved
-        date: post.published_at || post.created_at || post.$createdAt,
+        id: post.$id || post.id || '', // Support Appwrite ID or legacy ID if preserved
+        date: post.published_at || post.created_at || post.$createdAt || new Date().toISOString(),
         slug: post.slug,
         title: post.title,
         content: post.content || '',
         excerpt: post.excerpt || '',
-        author_id: post.author_id,
+        author_id: post.author_id || '',
         author_name: post.author?.full_name || 'Team BKBK',
         categories: [],
         featured_media_id: 0,

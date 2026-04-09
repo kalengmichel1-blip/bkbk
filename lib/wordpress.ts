@@ -65,14 +65,14 @@ interface PreviewData {
 }
 
 export async function getPostAndMorePosts(slug: string, preview: boolean, previewData: PreviewData) {
-  const postPreview = preview && previewData?.post;
+  const postPreview = (preview && previewData?.post) ? previewData.post : undefined;
   // The slug may be the id of an unpublished post
   const isId = Number.isInteger(Number(slug));
   const isSamePost = isId
     ? Number(slug) === postPreview?.id
     : slug === postPreview?.slug;
   const isDraft = isSamePost && preview;
-  const revisions = isDraft && postPreview?.revisions;
+  const revisions = isDraft ? postPreview?.revisions : undefined;
   const primary = isDraft && revisions ? revisions.nodes[0] : postPreview;
 
   const data = await fetchAPI(
@@ -122,7 +122,7 @@ export async function getPostAndMorePosts(slug: string, preview: boolean, previe
   `,
     {
       variables: {
-        id: isDraft ? postPreview.id : slug,
+        id: (isDraft && postPreview) ? postPreview.id : slug,
         idType: isDraft ? 'DATABASE_ID' : 'SLUG',
       },
     }
