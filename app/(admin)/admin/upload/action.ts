@@ -32,8 +32,9 @@ export async function uploadImage(formData: FormData) {
         const publicUrl = `${process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT}/storage/buckets/${STORAGE_BUCKET_ID}/files/${uploadedFile.$id}/view?project=${process.env.NEXT_PUBLIC_APPWRITE_PROJECT}`
 
         return { success: true, url: publicUrl }
-    } catch (error: any) {
+    } catch (error) {
         console.error('Upload error:', error)
-        return { error: error.message }
+        const message = error instanceof Error ? error.message : 'Upload failed';
+        return { error: message }
     }
 }

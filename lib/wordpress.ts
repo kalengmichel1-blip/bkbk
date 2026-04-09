@@ -1,6 +1,10 @@
 const API_URL = process.env.WORDPRESS_API_URL || "https://cms.kikayabinkarubi.net/graphql";
 
-async function fetchAPI(query: string, { variables }: { variables?: any } = {}) {
+interface FetchAPIOptions {
+  variables?: Record<string, unknown>;
+}
+
+async function fetchAPI(query: string, { variables }: FetchAPIOptions = {}) {
   const headers = { 'Content-Type': 'application/json' };
   const res = await fetch(API_URL, {
     method: 'POST',
@@ -52,7 +56,15 @@ export async function getAllPostsForHome(preview: boolean) {
   return data?.posts;
 }
 
-export async function getPostAndMorePosts(slug: string, preview: boolean, previewData: any) {
+interface PreviewData {
+  post?: {
+    id?: number;
+    slug?: string;
+    revisions?: { nodes: unknown[] };
+  };
+}
+
+export async function getPostAndMorePosts(slug: string, preview: boolean, previewData: PreviewData) {
   const postPreview = preview && previewData?.post;
   // The slug may be the id of an unpublished post
   const isId = Number.isInteger(Number(slug));
@@ -117,7 +129,7 @@ export async function getPostAndMorePosts(slug: string, preview: boolean, previe
   );
 
   // Filter out the main post
-  data.posts.edges = data.posts.edges.filter(({ node }: any) => node.slug !== slug);
+  data.posts.edges = data.posts.edges.filter(({ node }: { node: { slug: string } }) => node.slug !== slug);
   // If there are still 3 posts, remove the last one
   if (data.posts.edges.length > 2) data.posts.edges.pop();
 

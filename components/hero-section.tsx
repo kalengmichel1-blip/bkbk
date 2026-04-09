@@ -67,7 +67,6 @@ export function HeroSection({ post }: HeroSectionProps) {
                                 fill
                                 className="object-cover transition-transform duration-700 hover:scale-105"
                                 priority
-                                unoptimized // For external images
                             />
                         </div>
                     ) : (

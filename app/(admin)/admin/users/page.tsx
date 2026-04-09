@@ -8,6 +8,14 @@ import { createSessionClient } from '@/lib/appwrite/server'
 import { redirect } from 'next/navigation'
 import { canManageUsers } from '@/lib/utils/permissions'
 
+interface UserDocument {
+    $id: string;
+    full_name?: string;
+    username?: string;
+    role?: string;
+    created_at?: string;
+}
+
 export default async function UsersPage() {
     const { account } = await createSessionClient()
     
@@ -55,7 +63,7 @@ export default async function UsersPage() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-white/5">
-                                {users.map((user: any) => (
+                                {(users as UserDocument[]).map((user) => (
                                     <tr key={user.id} className="hover:bg-white/5 transition-colors">
                                         <td className="px-6 py-4">
                                             <div className="flex items-center gap-3">

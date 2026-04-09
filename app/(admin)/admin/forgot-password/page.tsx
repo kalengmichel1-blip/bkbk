@@ -30,8 +30,9 @@ export default function ForgotPasswordPage() {
                 redirectTo
             )
             setMessage({ type: 'success', text: 'Check your email for the password reset link.' })
-        } catch (error: any) {
-            setMessage({ type: 'error', text: error.message })
+        } catch (error) {
+            const msg = error instanceof Error ? error.message : 'Recovery failed';
+            setMessage({ type: 'error', text: msg })
         }
         setLoading(false)
     }

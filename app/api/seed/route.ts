@@ -20,7 +20,16 @@ export async function GET() {
         const fileContents = fs.readFileSync(jsonDirectory + '/posts.json', 'utf8')
         const posts = JSON.parse(fileContents)
 
-        const formattedPosts = posts.map((post: any) => ({
+interface SeedPost {
+    title: string;
+    slug: string;
+    content: string;
+    excerpt: string;
+    featured_image_url: string;
+    date: string;
+}
+
+        const formattedPosts = (posts as SeedPost[]).map((post) => ({
             // We can't easily preserve the ID if it conflicts with existing auto-increment, 
             // but we can try letting Supabase handle IDs or mapping them if crucial.
             // For simplicity and avoiding conflicts, let's let Supabase generate new IDs 
@@ -45,9 +54,10 @@ export async function GET() {
         for (const post of formattedPosts) {
             try {
                 await databases.createDocument(DB_ID, POSTS_COLLECTION, ID.unique(), post);
-            } catch (err: any) {
+            } catch (err) {
                 console.error('Appwrite error:', err)
-                return NextResponse.json({ error: err.message }, { status: 500 })
+                const message = err instanceof Error ? err.message : 'Import failed';
+                return NextResponse.json({ error: message }, { status: 500 })
             }
         }
 

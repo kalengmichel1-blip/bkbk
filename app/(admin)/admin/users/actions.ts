@@ -29,8 +29,9 @@ export async function createUser(firstName: string, email: string, password: str
             role: role,
             updated_at: new Date().toISOString()
         })
-    } catch (error: any) {
-        return { error: error.message }
+    } catch (error) {
+        const message = error instanceof Error ? error.message : 'Failed to create user';
+        return { error: message }
     }
 
     revalidatePath('/admin/users')
@@ -44,7 +45,7 @@ export async function getUsers() {
         const result = await databases.listDocuments(DB_ID, USERS_COLLECTION);
         // Note: Sort logic will be added via Query later, assuming it's supported by indexes.
         return result.documents;
-    } catch (error: any) {
+    } catch (error) {
         console.error("Error fetching users:", error)
         return []
     }
@@ -64,8 +65,9 @@ export async function updateUser(userId: string, fullName: string, role: string)
         // 2. Update Auth Name and Prefs (role)
         await appwriteUsers.updateName(userId, fullName);
         await appwriteUsers.updatePrefs(userId, { role: role });
-    } catch (error: any) {
-        return { error: error.message }
+    } catch (error) {
+        const message = error instanceof Error ? error.message : 'Failed to update user';
+        return { error: message }
     }
 
     revalidatePath('/admin/users')

@@ -17,8 +17,9 @@ export function ImportButton() {
             const result = await seedPosts()
             setMessage(`Success! Imported ${result.count} posts.`)
             // Refresh logic is handled by server action revalidatePath
-        } catch (error: any) {
-            setMessage(`Error: ${error.message}`)
+        } catch (error: unknown) {
+            const msg = error instanceof Error ? error.message : 'Import failed';
+            setMessage(`Error: ${msg}`)
         } finally {
             setLoading(false)
         }
