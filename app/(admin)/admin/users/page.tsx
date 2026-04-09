@@ -64,7 +64,7 @@ export default async function UsersPage() {
                             </thead>
                             <tbody className="divide-y divide-white/5">
                                 {(users as UserDocument[]).map((user) => (
-                                    <tr key={user.id} className="hover:bg-white/5 transition-colors">
+                                    <tr key={user.$id} className="hover:bg-white/5 transition-colors">
                                         <td className="px-6 py-4">
                                             <div className="flex items-center gap-3">
                                                 <div className="w-8 h-8 rounded-full bg-gradient-to-br from-brand-charcoal to-black border border-white/10 flex items-center justify-center text-xs font-bold text-gray-400">
@@ -101,7 +101,12 @@ export default async function UsersPage() {
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 text-right">
-                                            <EditUserDialog user={user} />
+                                            <EditUserDialog user={{
+                                                id: user.$id,
+                                                full_name: user.full_name || '',
+                                                username: user.username || '',
+                                                role: user.role || 'staff',
+                                            }} />
                                         </td>
                                     </tr>
                                 ))}
