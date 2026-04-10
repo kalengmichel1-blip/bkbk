@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npm run pages:build",
-    "next:build": "next build",
+    "build": "next build",
     "pages:build": "npx @opennextjs/cloudflare build --dangerouslyUseUnsupportedNextVersion",
     "start": "next start",
     "lint": "eslint"
