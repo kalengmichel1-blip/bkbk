@@ -17,7 +17,7 @@ const merriweather = Merriweather({
 
 export const metadata: Metadata = {
     title: "Team BKBK",
-    description: "Political thought, analysis, and news from Dr. Barnabé Kikaya Bin Karubi.",
+    description: "Political thought, analysis, and news by Dr. Barnabé Kikaya Bin Karubi.",
 };
 
 export default function RootLayout({

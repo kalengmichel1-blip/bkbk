@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  appwrite:
+    image: appwrite/appwrite:latest
+    container_name: appwrite
+    ports:
+      - "80:80"
+      - "443:443"
+    env_file:
+      - .env.appwrite
+    volumes:
+      - appwrite_data:/storage/uploads
+      - appwrite_cache:/storage/cache
+      - appwrite_logs:/storage/logs
+      - appwrite_config:/storage/config
+    networks:
+      - appwrite
+    depends_on:
+      - mariadb
+      - redis
+
+  mariadb:
+    image: mariadb:10.7
+    container_name: appwrite-mariadb
+    env_file:
+      - .env.appwrite
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-appwrite}
+      MYSQL_USER: ${MYSQL_USER:-appwrite}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-password}
+    volumes:
+      - appwrite_mariadb:/var/lib/mysql
+    networks:
+      - appwrite
+    command: --max_allowed_packet=256M
+
+  redis:
+    image: redis:7-alpine
+    container_name: appwrite-redis
+    networks:
+      - appwrite
+
+volumes:
+  appwrite_data:
+  appwrite_cache:
+  appwrite_logs:
+  appwrite_config:
+  appwrite_mariadb:
+
+networks:
+  appwrite:
+    driver: bridge
