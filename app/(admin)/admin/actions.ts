@@ -29,7 +29,7 @@ export async function loginAction(formData: FormData) {
             httpOnly: true,
             sameSite: 'strict',
             secure: process.env.NODE_ENV === 'production',
-            maxAge: new Date(session.expire).getTime() - Date.now(),
+            maxAge: Math.floor((new Date(session.expire).getTime() - Date.now()) / 1000),
         });
         
         return { success: true };
