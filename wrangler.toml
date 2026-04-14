@@ -1,7 +1,12 @@
 name = "bkbk-main"
-compatibility_date = "2024-03-20"
-compatibility_flags = ["nodejs_compat"]
+main = ".open-next/worker.js"
+compatibility_date = "2026-04-09"
+compatibility_flags = ["nodejs_compat", "global_fetch_strictly_public"]
 
-[build]
-command = "npm run pages:build"
-pages_build_output_dir = ".vercel/output/static"
+[assets]
+directory = ".open-next/assets"
+binding = "ASSETS"
+
+[[services]]
+binding = "WORKER_SELF_REFERENCE"
+service = "bkbk-main"
